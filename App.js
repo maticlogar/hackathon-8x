@@ -5,6 +5,7 @@ import { GameProvider } from './lib/store';
 import { colors, typography } from './lib/theme';
 import LanguagesScreen from './screens/LanguagesScreen';
 import LevelsScreen from './screens/LevelsScreen';
+import LessonScreen from './screens/LessonScreen';
 
 function PlaceholderScreen({ label }) {
   return (
@@ -42,7 +43,14 @@ export default function App() {
       />
     );
   } else if (screen === 'lesson') {
-    content = <PlaceholderScreen label={`Lesson · ${selectedLanguageId} · level ${selectedLevel}`} />;
+    content = (
+      <LessonScreen
+        langId={selectedLanguageId}
+        level={selectedLevel}
+        onExit={() => setScreen('levels')}
+        onComplete={() => setScreen('levels')}
+      />
+    );
   } else if (screen === 'shop') {
     content = <PlaceholderScreen label="Shop" />;
   } else if (screen === 'crate') {
