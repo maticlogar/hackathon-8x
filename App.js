@@ -6,6 +6,9 @@ import { colors, typography } from './lib/theme';
 import LanguagesScreen from './screens/LanguagesScreen';
 import LevelsScreen from './screens/LevelsScreen';
 import LessonScreen from './screens/LessonScreen';
+import ShopScreen from './screens/ShopScreen';
+import CrateScreen from './screens/CrateScreen';
+import CollectionScreen from './screens/CollectionScreen';
 
 function PlaceholderScreen({ label }) {
   return (
@@ -20,6 +23,7 @@ export default function App() {
   const [screen, setScreen] = useState('languages');
   const [selectedLanguageId, setSelectedLanguageId] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedCrateTypeId, setSelectedCrateTypeId] = useState(null);
 
   let content;
   if (screen === 'languages') {
@@ -29,6 +33,9 @@ export default function App() {
           setSelectedLanguageId(langId);
           setScreen('levels');
         }}
+        onOpenShop={() => setScreen('shop')}
+        onOpenCollection={() => setScreen('collection')}
+        onOpenSurvival={() => setScreen('survival')}
       />
     );
   } else if (screen === 'levels') {
@@ -52,11 +59,25 @@ export default function App() {
       />
     );
   } else if (screen === 'shop') {
-    content = <PlaceholderScreen label="Shop" />;
+    content = (
+      <ShopScreen
+        onBack={() => setScreen('languages')}
+        onBuyCrate={(crateTypeId) => {
+          setSelectedCrateTypeId(crateTypeId);
+          setScreen('crate');
+        }}
+      />
+    );
   } else if (screen === 'crate') {
-    content = <PlaceholderScreen label="Crate" />;
+    content = (
+      <CrateScreen
+        crateTypeId={selectedCrateTypeId}
+        onGoShop={() => setScreen('shop')}
+        onGoCollection={() => setScreen('collection')}
+      />
+    );
   } else if (screen === 'collection') {
-    content = <PlaceholderScreen label="Collection" />;
+    content = <CollectionScreen onBack={() => setScreen('languages')} />;
   } else if (screen === 'survival') {
     content = <PlaceholderScreen label="Survival" />;
   }

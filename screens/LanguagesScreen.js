@@ -4,7 +4,7 @@ import { LANGUAGES } from '../content/languages';
 import Mascot from '../components/Mascot';
 import CoinBar from '../components/CoinBar';
 
-export default function LanguagesScreen({ onSelectLanguage }) {
+export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCollection, onOpenSurvival }) {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
@@ -16,6 +16,21 @@ export default function LanguagesScreen({ onSelectLanguage }) {
           </View>
         </View>
         <CoinBar />
+      </View>
+
+      <View style={styles.navRow}>
+        <Pressable style={styles.navButton} onPress={onOpenShop}>
+          <Text style={styles.navIcon}>🛒</Text>
+          <Text style={styles.navLabel}>Trgovina</Text>
+        </Pressable>
+        <Pressable style={styles.navButton} onPress={onOpenCollection}>
+          <Text style={styles.navIcon}>📦</Text>
+          <Text style={styles.navLabel}>Zbirka</Text>
+        </Pressable>
+        <Pressable style={styles.navButton} onPress={onOpenSurvival}>
+          <Text style={styles.navIcon}>💀</Text>
+          <Text style={styles.navLabel}>Preživetje</Text>
+        </Pressable>
       </View>
 
       <Text style={[typography.label, styles.sectionLabel]}>IZBERI JEZIK / CHOOSE LANGUAGE</Text>
@@ -69,6 +84,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
+  },
+  navRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: spacing.sm,
+    marginBottom: spacing.lg,
+  },
+  navButton: {
+    flex: 1,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
+  },
+  navIcon: {
+    fontSize: 22,
+  },
+  navLabel: {
+    ...typography.caption,
+    fontSize: 11,
+    marginTop: 2,
   },
   sectionLabel: {
     marginBottom: spacing.sm,
