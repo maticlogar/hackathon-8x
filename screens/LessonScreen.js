@@ -14,12 +14,13 @@ import { getLanguage } from '../content/languages';
 import { getLevelsForLanguage } from '../lib/lessons';
 import { scoreRecording } from '../lib/scoring';
 import { useGame } from '../lib/store';
+import { useTripleTap } from '../lib/tripleTap';
 
 const PASS_THRESHOLD = 60;
 
 // phase: 'word' -> 'recording' -> 'scoring' -> 'result' -> (retry, or next word / 'levelComplete')
 export default function LessonScreen({ langId, level, onExit, onComplete }) {
-  const { dispatch } = useGame();
+  const { state, dispatch } = useGame();
   const lang = getLanguage(langId);
   const words = getLevelsForLanguage(langId).find((l) => l.level === level)?.words ?? [];
 
@@ -63,6 +64,7 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
       targetWord: word.word,
       meaning: word.actually_means_en,
       speechCode: lang.speechCode,
+      forceFallback: state.forceFallback,
     });
     setLastResult(result);
     setPhase('result');
@@ -78,6 +80,11 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
       Animated.spring(ringScale, { toValue: 1, friction: 5, useNativeDriver: true }).start();
     }
   }, [phase]);
+
+  const handleTripleTap = useTripleTap(() => {
+    dispatch({ type: 'TOGGLE_FORCE_FALLBACK' });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+  });
 
   const handleRetry = () => {
     setPhase('word');
@@ -168,17 +175,19 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
 
       {phase === 'result' ? (
         <View style={styles.resultArea}>
-          <Animated.View
-            style={[
-              styles.scoreRing,
-              {
-                borderColor: lastResult.score >= PASS_THRESHOLD ? colors.success : colors.danger,
-                transform: [{ scale: ringScale }],
-              },
-            ]}
-          >
-            <Text style={styles.scoreNumber}>{lastResult.score}</Text>
-          </Animated.View>
+          <Pressable onPress={handleTripleTap}>
+            <Animated.View
+              style={[
+                styles.scoreRing,
+                {
+                  borderColor: lastResult.score >= PASS_THRESHOLD ? colors.success : colors.danger,
+                  transform: [{ scale: ringScale }],
+                },
+              ]}
+            >
+              <Text style={styles.scoreNumber}>{lastResult.score}</Text>
+            </Animated.View>
+          </Pressable>
           <Text style={styles.roast}>{lastResult.roast_line}</Text>
           {lastResult.score < PASS_THRESHOLD && (
             <Text style={typography.caption}>Score {PASS_THRESHOLD}+ to continue</Text>

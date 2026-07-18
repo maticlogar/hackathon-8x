@@ -1,12 +1,18 @@
+import { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { colors, typography, spacing, radius } from '../lib/theme';
 import { LANGUAGES } from '../content/languages';
 import Mascot from '../components/Mascot';
 import CoinBar from '../components/CoinBar';
+import SettingsModal from '../components/SettingsModal';
 
 export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCollection, onOpenSurvival }) {
+  const [settingsVisible, setSettingsVisible] = useState(false);
+
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+      <SettingsModal visible={settingsVisible} onClose={() => setSettingsVisible(false)} />
+
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Mascot size={48} />
@@ -15,7 +21,12 @@ export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCo
             <Text style={typography.caption}>Jezni Kozorog is waiting</Text>
           </View>
         </View>
-        <CoinBar />
+        <View style={styles.headerRight}>
+          <CoinBar />
+          <Pressable style={styles.gearButton} onPress={() => setSettingsVisible(true)} hitSlop={8}>
+            <Text style={styles.gearIcon}>⚙️</Text>
+          </Pressable>
+        </View>
       </View>
 
       <View style={styles.navRow}>
@@ -84,6 +95,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  gearButton: {
+    padding: 4,
+  },
+  gearIcon: {
+    fontSize: 20,
   },
   navRow: {
     flexDirection: 'row',

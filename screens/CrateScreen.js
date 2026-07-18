@@ -14,6 +14,7 @@ import { openCrate } from '../lib/crates';
 import { getLanguage } from '../content/languages';
 import { scoreRecording } from '../lib/scoring';
 import { useGame } from '../lib/store';
+import { useTripleTap } from '../lib/tripleTap';
 
 const RARITY_EMOJI = {
   common: '📦',
@@ -93,6 +94,7 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
         targetWord: item.word,
         meaning: item.meaning_en,
         speechCode: lang.speechCode,
+        forceFallback: state.forceFallback,
       });
       pass = result.score >= GATE_PASS_THRESHOLD;
     }
@@ -108,6 +110,11 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
   };
 
   const rotateInterpolate = shake.interpolate({ inputRange: [-1, 1], outputRange: ['-8deg', '8deg'] });
+
+  const handleTripleTap = useTripleTap(() => {
+    dispatch({ type: 'TOGGLE_FORCE_FALLBACK' });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+  });
 
   return (
     <View style={styles.screen}>
@@ -148,7 +155,9 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
 
       {(phase === 'gate' || phase === 'scoring') && (
         <>
-          <Text style={typography.label}>IZGOVORI · SAY IT</Text>
+          <Pressable onPress={handleTripleTap}>
+            <Text style={typography.label}>IZGOVORI · SAY IT</Text>
+          </Pressable>
           <Text style={styles.gateFlag}>{lang?.flag}</Text>
           <Text style={styles.gateWord}>{item.word}</Text>
           <Text style={[typography.caption, { marginBottom: spacing.lg }]}>No guide this time.</Text>
