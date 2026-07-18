@@ -1,23 +1,13 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { GameProvider } from './lib/store';
-import { colors, typography } from './lib/theme';
 import LanguagesScreen from './screens/LanguagesScreen';
 import LevelsScreen from './screens/LevelsScreen';
 import LessonScreen from './screens/LessonScreen';
 import ShopScreen from './screens/ShopScreen';
 import CrateScreen from './screens/CrateScreen';
 import CollectionScreen from './screens/CollectionScreen';
-
-function PlaceholderScreen({ label }) {
-  return (
-    <View style={styles.placeholder}>
-      <Text style={typography.heading}>{label}</Text>
-      <Text style={typography.caption}>Coming in a later build step</Text>
-    </View>
-  );
-}
+import SurvivalScreen from './screens/SurvivalScreen';
 
 export default function App() {
   const [screen, setScreen] = useState('languages');
@@ -79,7 +69,7 @@ export default function App() {
   } else if (screen === 'collection') {
     content = <CollectionScreen onBack={() => setScreen('languages')} />;
   } else if (screen === 'survival') {
-    content = <PlaceholderScreen label="Survival" />;
+    content = <SurvivalScreen onBack={() => setScreen('languages')} />;
   }
 
   return (
@@ -89,13 +79,3 @@ export default function App() {
     </GameProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  placeholder: {
-    flex: 1,
-    backgroundColor: colors.bg,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-  },
-});
