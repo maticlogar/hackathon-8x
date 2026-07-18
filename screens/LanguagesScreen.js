@@ -7,7 +7,7 @@ import Mascot from '../components/Mascot';
 import CoinBar from '../components/CoinBar';
 import SettingsModal from '../components/SettingsModal';
 
-export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCollection, onOpenSurvival }) {
+export default function LanguagesScreen({ onSelectLanguage }) {
   const [settingsVisible, setSettingsVisible] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCo
           <Mascot size={48} />
           <View>
             <Text style={typography.title}>Preklinjaj</Text>
-            <Text style={typography.caption}>Jezni Kozorog is waiting</Text>
+            <Text style={typography.caption}>The mascot is waiting</Text>
           </View>
         </View>
         <View style={styles.headerRight}>
@@ -30,22 +30,7 @@ export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCo
         </View>
       </View>
 
-      <View style={styles.navRow}>
-        <Pressable style={styles.navButton} onPress={onOpenShop}>
-          <Feather name="shopping-cart" size={22} color={colors.textPrimary} />
-          <Text style={styles.navLabel}>Trgovina</Text>
-        </Pressable>
-        <Pressable style={styles.navButton} onPress={onOpenCollection}>
-          <Feather name="package" size={22} color={colors.textPrimary} />
-          <Text style={styles.navLabel}>Zbirka</Text>
-        </Pressable>
-        <Pressable style={styles.navButton} onPress={onOpenSurvival}>
-          <Feather name="alert-triangle" size={22} color={colors.textPrimary} />
-          <Text style={styles.navLabel}>Preživetje</Text>
-        </Pressable>
-      </View>
-
-      <Text style={[typography.label, styles.sectionLabel]}>IZBERI JEZIK / CHOOSE LANGUAGE</Text>
+      <Text style={[typography.label, styles.sectionLabel]}>CHOOSE LANGUAGE</Text>
 
       <View style={styles.grid}>
         {LANGUAGES.map((lang) => (
@@ -60,13 +45,11 @@ export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCo
             ]}
           >
             <Text style={styles.flag}>{lang.flag}</Text>
-            <Text style={styles.langName}>{lang.name}</Text>
-            <Text style={styles.langNameEn}>{lang.nameEn}</Text>
+            <Text style={styles.langName}>{lang.nameEn}</Text>
             {lang.locked && (
               <View style={styles.lockedOverlay}>
                 <Feather name="lock" size={26} color={colors.textPrimary} style={{ marginBottom: 4 }} />
-                <Text style={styles.lockedText}>Kmalu</Text>
-                <Text style={styles.lockedTextEn}>Coming soon</Text>
+                <Text style={styles.lockedText}>Coming soon</Text>
               </View>
             )}
           </Pressable>
@@ -105,26 +88,6 @@ const styles = StyleSheet.create({
   gearButton: {
     padding: 4,
   },
-  navRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: spacing.sm,
-    marginBottom: spacing.lg,
-  },
-  navButton: {
-    flex: 1,
-    backgroundColor: colors.card,
-    borderWidth: 2,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-  },
-  navLabel: {
-    ...typography.caption,
-    fontSize: 11,
-    marginTop: 2,
-  },
   sectionLabel: {
     marginBottom: spacing.sm,
   },
@@ -156,9 +119,6 @@ const styles = StyleSheet.create({
     ...typography.heading,
     fontSize: 17,
   },
-  langNameEn: {
-    ...typography.caption,
-  },
   lockedOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.lockedOverlay,
@@ -168,8 +128,5 @@ const styles = StyleSheet.create({
   lockedText: {
     ...typography.body,
     fontWeight: '700',
-  },
-  lockedTextEn: {
-    ...typography.caption,
   },
 });

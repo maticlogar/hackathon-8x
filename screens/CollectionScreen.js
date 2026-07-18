@@ -17,14 +17,14 @@ export default function CollectionScreen({ onBack }) {
       <View style={styles.header}>
         <Pressable onPress={onBack} hitSlop={12} style={styles.backRow}>
           <Feather name="chevron-left" size={18} color={colors.textSecondary} />
-          <Text style={styles.back}>Nazaj</Text>
+          <Text style={styles.back}>Back</Text>
         </Pressable>
         <CoinBar />
       </View>
 
-      <Text style={typography.title}>Zbirka</Text>
+      <Text style={typography.title}>Collection</Text>
       <Text style={[typography.caption, { marginBottom: spacing.lg }]}>
-        Collection · {ownedIds.size} / {wordpool.length}
+        {ownedIds.size} / {wordpool.length} words caught
       </Text>
 
       {RARITY_ORDER.map((rarity) => {

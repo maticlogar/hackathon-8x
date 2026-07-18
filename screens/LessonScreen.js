@@ -158,7 +158,7 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
       <View style={styles.header}>
         <Pressable onPress={onExit} hitSlop={12} style={styles.backRow}>
           <Feather name="chevron-left" size={18} color={colors.textSecondary} />
-          <Text style={styles.back}>Nazaj</Text>
+          <Text style={styles.back}>Back</Text>
         </Pressable>
         <Text style={typography.caption}>
           {wordIndex + 1} / {words.length}
@@ -235,7 +235,7 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
               borderRadius={radius.pill}
               contentStyle={styles.secondaryButtonContent}
             >
-              <Text style={styles.secondaryButtonText}>Poskusi znova · Retry</Text>
+              <Text style={styles.secondaryButtonText}>Retry</Text>
             </TactileButton>
             <TactileButton
               disabled={lastResult.score < PASS_THRESHOLD}
@@ -247,7 +247,7 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
               contentStyle={styles.primaryButtonContent}
             >
               <Text style={styles.primaryButtonText}>
-                {isLastWord ? 'Dokončaj · Finish level' : 'Naprej · Next word'}
+                {isLastWord ? 'Finish level' : 'Next word'}
               </Text>
             </TactileButton>
           </View>
@@ -255,7 +255,7 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
       ) : (
         <View style={styles.micArea}>
           {phase === 'scoring' ? (
-            <Text style={styles.judging}>Sodnik posluša…</Text>
+            <Text style={styles.judging}>Judging…</Text>
           ) : (
             <TactileButton
               onPressIn={startRecording}

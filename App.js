@@ -28,9 +28,6 @@ export default function App() {
           setSelectedLanguageId(langId);
           setScreen('levels');
         }}
-        onOpenShop={() => setScreen('shop')}
-        onOpenCollection={() => setScreen('collection')}
-        onOpenSurvival={() => setScreen('survival')}
       />
     );
   } else if (screen === 'levels') {

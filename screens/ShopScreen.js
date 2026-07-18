@@ -20,21 +20,20 @@ export default function ShopScreen({ onBack, onBuyCrate }) {
       <View style={styles.header}>
         <Pressable onPress={onBack} hitSlop={12} style={styles.backRow}>
           <Feather name="chevron-left" size={18} color={colors.textSecondary} />
-          <Text style={styles.back}>Nazaj</Text>
+          <Text style={styles.back}>Back</Text>
         </Pressable>
         <CoinBar />
       </View>
 
-      <Text style={typography.title}>Trgovina</Text>
-      <Text style={[typography.caption, { marginBottom: spacing.lg }]}>Shop</Text>
+      <Text style={typography.title}>Shop</Text>
+      <Text style={[typography.caption, { marginBottom: spacing.lg }]}>Buy crates with coins</Text>
 
       {CRATE_TYPES.map((crate) => {
         const affordable = state.coins >= crate.cost;
         return (
           <View key={crate.id} style={styles.card}>
             <Image source={crate.image} style={styles.icon} resizeMode="contain" />
-            <Text style={typography.heading}>{crate.name}</Text>
-            <Text style={typography.caption}>{crate.nameEn}</Text>
+            <Text style={typography.heading}>{crate.nameEn}</Text>
 
             <View style={styles.oddsRow}>
               {Object.entries(crate.odds).map(([rarity, pct]) => (

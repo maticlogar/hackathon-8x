@@ -22,7 +22,7 @@ export default function LevelsScreen({ langId, onBack, onSelectLevel, onOpenShop
       <View style={styles.header}>
         <Pressable onPress={onBack} hitSlop={12} style={styles.backRow}>
           <Feather name="chevron-left" size={18} color={colors.textSecondary} />
-          <Text style={styles.back}>Nazaj</Text>
+          <Text style={styles.back}>Back</Text>
         </Pressable>
         <CoinBar />
       </View>
@@ -30,9 +30,9 @@ export default function LevelsScreen({ langId, onBack, onSelectLevel, onOpenShop
       <View style={styles.banner}>
         <Text style={styles.bannerWatermark}>{lang.flag}</Text>
         <View>
-          <Text style={styles.bannerLabel}>1. POGLAVJE · CHAPTER 1</Text>
-          <Text style={styles.bannerTitle}>{lang.name}</Text>
-          <Text style={styles.bannerSubtitle}>{levels.length} levels · {lang.nameEn}</Text>
+          <Text style={styles.bannerLabel}>CHAPTER 1</Text>
+          <Text style={styles.bannerTitle}>{lang.nameEn}</Text>
+          <Text style={styles.bannerSubtitle}>{levels.length} levels</Text>
         </View>
       </View>
 
@@ -110,7 +110,7 @@ export default function LevelsScreen({ langId, onBack, onSelectLevel, onOpenShop
 
       <View style={styles.footer}>
         <View style={styles.footerLine} />
-        <Text style={styles.footerText}>Kmalu več besed</Text>
+        <Text style={styles.footerText}>More words coming soon</Text>
         <View style={styles.footerLine} />
       </View>
     </ScrollView>

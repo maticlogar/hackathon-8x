@@ -119,8 +119,7 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
             style={[styles.crateImage, { transform: [{ rotate: rotateInterpolate }] }]}
             resizeMode="contain"
           />
-          <Text style={typography.heading}>Odpiranje…</Text>
-          <Text style={typography.caption}>Opening…</Text>
+          <Text style={typography.heading}>Opening…</Text>
         </>
       )}
 
@@ -152,7 +151,7 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
             contentStyle={styles.primaryButtonContent}
             style={{ marginTop: spacing.md }}
           >
-            <Text style={styles.primaryButtonText}>Nadaljuj · Continue</Text>
+            <Text style={styles.primaryButtonText}>Continue</Text>
           </TactileButton>
         </>
       )}
@@ -160,14 +159,14 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
       {(phase === 'gate' || phase === 'scoring') && (
         <>
           <Pressable onPress={handleTripleTap}>
-            <Text style={typography.label}>IZGOVORI · SAY IT</Text>
+            <Text style={typography.label}>SAY IT</Text>
           </Pressable>
           <Text style={styles.gateFlag}>{lang?.flag}</Text>
           <Text style={styles.gateWord}>{item.word}</Text>
           <Text style={[typography.caption, { marginBottom: spacing.lg }]}>No guide this time.</Text>
 
           {phase === 'scoring' ? (
-            <Text style={styles.judging}>Sodnik posluša…</Text>
+            <Text style={styles.judging}>Judging…</Text>
           ) : (
             <TactileButton
               onPressIn={startRecording}
@@ -190,9 +189,8 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
           <Text style={[styles.rarityLabel, { color: rarityColor }]}>{item.word}</Text>
           <View style={styles.passRow}>
             <Feather name="check-circle" size={22} color={colors.success} />
-            <Text style={styles.passText}>V zbirki!</Text>
+            <Text style={styles.passText}>Added to collection!</Text>
           </View>
-          <Text style={typography.caption}>Added to collection</Text>
           <View style={styles.resultButtons}>
             <TactileButton
               onPress={onGoCollection}
@@ -201,7 +199,7 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
               contentStyle={styles.primaryButtonContent}
               style={{ marginTop: spacing.md }}
             >
-              <Text style={styles.primaryButtonText}>Zbirka · Collection</Text>
+              <Text style={styles.primaryButtonText}>Collection</Text>
             </TactileButton>
             <TactileButton
               onPress={onGoShop}
@@ -210,7 +208,7 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
               contentStyle={styles.secondaryButtonContent}
               style={{ marginTop: spacing.sm }}
             >
-              <Text style={styles.secondaryButtonText}>Trgovina · Shop</Text>
+              <Text style={styles.secondaryButtonText}>Shop</Text>
             </TactileButton>
           </View>
         </>
@@ -219,8 +217,8 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
       {phase === 'fail' && (
         <>
           <Feather name="x-circle" size={72} color={colors.danger} />
-          <Text style={styles.failText}>Izgubljeno</Text>
-          <Text style={typography.caption}>Lost — better luck next crate</Text>
+          <Text style={styles.failText}>Lost!</Text>
+          <Text style={typography.caption}>Better luck next crate</Text>
           <View style={styles.resultButtons}>
             <TactileButton
               onPress={onGoShop}
@@ -229,7 +227,7 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
               contentStyle={styles.primaryButtonContent}
               style={{ marginTop: spacing.md }}
             >
-              <Text style={styles.primaryButtonText}>Trgovina · Shop</Text>
+              <Text style={styles.primaryButtonText}>Shop</Text>
             </TactileButton>
           </View>
         </>

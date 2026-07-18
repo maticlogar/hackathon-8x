@@ -16,8 +16,7 @@ export default function SettingsModal({ visible, onClose }) {
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={styles.backdrop}>
         <View style={styles.sheet}>
-          <Text style={typography.title}>Nastavitve</Text>
-          <Text style={[typography.caption, { marginBottom: spacing.lg }]}>Settings</Text>
+          <Text style={typography.title}>Settings</Text>
 
           <View style={styles.row}>
             <View style={{ flex: 1 }}>
@@ -42,7 +41,7 @@ export default function SettingsModal({ visible, onClose }) {
             borderRadius={radius.pill}
             contentStyle={styles.closeButtonContent}
           >
-            <Text style={styles.closeButtonText}>Zapri · Close</Text>
+            <Text style={styles.closeButtonText}>Close</Text>
           </TactileButton>
         </View>
       </View>

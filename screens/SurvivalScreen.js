@@ -100,8 +100,7 @@ export default function SurvivalScreen({ onBack }) {
     return (
       <View style={styles.screen}>
         <Image source={require('../assets/mascots/trophy.png')} style={styles.trophyImage} resizeMode="contain" />
-        <Text style={typography.title}>Konec igre</Text>
-        <Text style={typography.caption}>Game over</Text>
+        <Text style={typography.title}>Game over</Text>
         <View style={styles.summary}>
           <View style={styles.summaryRow}>
             <Image source={require('../assets/mascots/currency.png')} style={styles.summaryIcon} resizeMode="contain" />
@@ -119,7 +118,7 @@ export default function SurvivalScreen({ onBack }) {
           contentStyle={styles.primaryButtonContent}
           style={{ marginTop: spacing.sm }}
         >
-          <Text style={styles.primaryButtonText}>Nazaj · Back</Text>
+          <Text style={styles.primaryButtonText}>Back</Text>
         </TactileButton>
       </View>
     );
@@ -130,7 +129,7 @@ export default function SurvivalScreen({ onBack }) {
       <View style={styles.header}>
         <Pressable onPress={onBack} hitSlop={12} style={styles.backRow}>
           <Feather name="chevron-left" size={18} color={colors.textSecondary} />
-          <Text style={styles.back}>Nazaj</Text>
+          <Text style={styles.back}>Back</Text>
         </Pressable>
         <View style={styles.livesRow}>
           {Array.from({ length: START_LIVES }).map((_, i) => (
@@ -201,7 +200,7 @@ export default function SurvivalScreen({ onBack }) {
       {(phase === 'word' || phase === 'scoring') && (
         <View style={styles.micArea}>
           {phase === 'scoring' ? (
-            <Text style={styles.judging}>Sodnik posluša…</Text>
+            <Text style={styles.judging}>Judging…</Text>
           ) : (
             <TactileButton
               onPressIn={startRecording}

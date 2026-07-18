@@ -28,7 +28,7 @@ export const LANGUAGES = [
     speechCode: 'ru-RU',
     accent: '#0039A6',
     accentSecondary: '#D52B1E',
-    locked: true,
+    locked: false,
   },
   {
     id: 'es',
@@ -38,7 +38,7 @@ export const LANGUAGES = [
     speechCode: 'es-ES',
     accent: '#AA151B',
     accentSecondary: '#F1BF00',
-    locked: true,
+    locked: false,
   },
   {
     id: 'sh',
@@ -48,7 +48,7 @@ export const LANGUAGES = [
     speechCode: 'hr-HR',
     accent: '#C6363C',
     accentSecondary: '#0C4076',
-    locked: true,
+    locked: false,
   },
 ];
 
