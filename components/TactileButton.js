@@ -11,6 +11,8 @@ export default function TactileButton({
   backgroundColor = colors.card,
   shadowColor,
   borderRadius = 16,
+  borderWidth = 2,
+  borderColor = colors.border,
   depth = tactile.depth,
   style,
   contentStyle,
@@ -47,8 +49,8 @@ export default function TactileButton({
             bottom: 0,
             backgroundColor: resolvedShadow,
             borderRadius,
-            borderWidth: 2,
-            borderColor: colors.border,
+            borderWidth,
+            borderColor,
           }}
         />
         <Animated.View
@@ -56,8 +58,8 @@ export default function TactileButton({
             {
               backgroundColor,
               borderRadius,
-              borderWidth: 2,
-              borderColor: colors.border,
+              borderWidth,
+              borderColor,
               transform: [{ translateY }],
             },
             contentStyle,

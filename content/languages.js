@@ -8,6 +8,8 @@ export const LANGUAGES = [
     speechCode: 'sl-SI',
     accent: '#0038A8',
     accentSecondary: '#D0103A',
+    heat: 3,
+    tagline: "the founder's choice",
     locked: false,
   },
   {
@@ -18,6 +20,8 @@ export const LANGUAGES = [
     speechCode: 'de-DE',
     accent: '#FFCC00',
     accentSecondary: '#1a1a1a',
+    heat: 2,
+    tagline: "surprisingly efficient",
     locked: false,
   },
   {
@@ -28,6 +32,8 @@ export const LANGUAGES = [
     speechCode: 'ru-RU',
     accent: '#0039A6',
     accentSecondary: '#D52B1E',
+    heat: 3,
+    tagline: "poetry, with teeth",
     locked: false,
   },
   {
@@ -38,6 +44,8 @@ export const LANGUAGES = [
     speechCode: 'es-ES',
     accent: '#AA151B',
     accentSecondary: '#F1BF00',
+    heat: 2,
+    tagline: "hand gestures included",
     locked: false,
   },
   {
@@ -48,6 +56,8 @@ export const LANGUAGES = [
     speechCode: 'hr-HR',
     accent: '#C6363C',
     accentSecondary: '#0C4076',
+    heat: 5,
+    tagline: "advanced students only",
     locked: false,
   },
 ];

@@ -36,7 +36,8 @@ non-mascot art). Use kebab-case names. List them here so I know where each is us
 
 | Stitch mockup | Mapped to | Notes |
 |---------------|-----------|-------|
-| "Swear like a Local" journey map | `LevelsScreen` | dashed trail spine added; already close |
+| "Pick Your Poison" language picker | `LanguagesScreen` | select-then-confirm flow with "LET'S SWEAR" CTA; chilli heat + tagline added to `content/languages.js`; back-arrow slot reused for the settings gear (root screen has no back); progress bar shows levels unlocked across all languages |
+| "Swear like a Local" journey map | `LevelsScreen` | v2 applied: dotted paper bg (`assets/patterns/dot-grid.png` tile), sticky bordered app bar, section card with 8px red shadow slab, dotted node-to-node connectors, yellow/orange completed nodes, 4px node borders, scroll-to-current FAB |
 | "Scenario Challenge" mic/ring | `LessonScreen` word+record phase | scenario/hint-chips dropped (no fit); kept red word card + tactile mic + recording pulse bars |
 | Score result "87/100" chili slap | `LessonScreen` result phase | pass→`lvl-completion-mascot`, fail→`app-mascot`; roast in speech bubble; "hear your attempt" replays recording |
 | "LOCAL TIER COMPLETE" | `LessonScreen` levelComplete phase | stat tiles ⚡`currency`/🏆`trophy`/🔥`streak-fire-mascot`, progress bar, hero `lvl-completion-mascot` |

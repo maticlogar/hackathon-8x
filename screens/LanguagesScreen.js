@@ -1,132 +1,276 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, typography, spacing, radius } from '../lib/theme';
 import { LANGUAGES } from '../content/languages';
-import Mascot from '../components/Mascot';
-import CoinBar from '../components/CoinBar';
+import { getLevelsForLanguage } from '../lib/lessons';
+import { useGame } from '../lib/store';
+import DottedBackground from '../components/DottedBackground';
+import TactileButton from '../components/TactileButton';
 import SettingsModal from '../components/SettingsModal';
 
+const firstUnlocked = LANGUAGES.find((l) => !l.locked)?.id ?? LANGUAGES[0].id;
+
+// Chilli rating: how brutal a language's slang gets.
+function HeatRow({ count }) {
+  return (
+    <View style={styles.heatRow}>
+      {Array.from({ length: count }, (_, i) => (
+        <MaterialCommunityIcons key={i} name="chili-hot" size={17} color={colors.primary} />
+      ))}
+    </View>
+  );
+}
+
 export default function LanguagesScreen({ onSelectLanguage }) {
+  const { state } = useGame();
   const [settingsVisible, setSettingsVisible] = useState(false);
+  const [selectedId, setSelectedId] = useState(firstUnlocked);
+  const [requested, setRequested] = useState(false);
+
+  // Fraction of all levels across all languages that have been unlocked.
+  let total = 0;
+  let done = 0;
+  LANGUAGES.forEach((l) => {
+    const count = getLevelsForLanguage(l.id).length;
+    total += count;
+    done += Math.min(count, (state.progress[l.id]?.unlockedLevel ?? 1) - 1);
+  });
+  const progress = total ? Math.round((done / total) * 100) : 0;
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+    <View style={styles.screen}>
+      <DottedBackground />
       <SettingsModal visible={settingsVisible} onClose={() => setSettingsVisible(false)} />
 
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Mascot size={48} />
-          <View>
-            <Text style={typography.title}>Preklinjaj</Text>
-            <Text style={typography.caption}>The mascot is waiting</Text>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+        <View style={styles.topRow}>
+          <TactileButton
+            onPress={() => setSettingsVisible(true)}
+            backgroundColor={colors.bgElevated}
+            borderRadius={radius.md}
+            depth={4}
+            contentStyle={styles.gearFace}
+          >
+            <Feather name="settings" size={22} color={colors.textPrimary} />
+          </TactileButton>
+          <View style={styles.progressTrack}>
+            <View style={[styles.progressFill, { width: `${Math.max(4, progress)}%` }]} />
           </View>
         </View>
-        <View style={styles.headerRight}>
-          <CoinBar />
-          <Pressable style={styles.gearButton} onPress={() => setSettingsVisible(true)} hitSlop={8}>
-            <Feather name="settings" size={20} color={colors.textPrimary} />
+
+        <Text style={styles.title}>PICK YOUR POISON</Text>
+        <Text style={styles.subtitle}>every language, the way locals actually speak it</Text>
+
+        <View style={styles.list}>
+          {LANGUAGES.map((lang) => {
+            const selected = lang.id === selectedId;
+            return (
+              <TactileButton
+                key={lang.id}
+                onPress={() => setSelectedId(lang.id)}
+                disabled={lang.locked}
+                backgroundColor={selected ? colors.primarySelectedBg : colors.bgElevated}
+                shadowColor={selected ? colors.primaryShadowSoft : colors.border}
+                borderColor={selected ? colors.primary : colors.border}
+                borderRadius={20}
+                depth={4}
+                contentStyle={styles.cardFace}
+              >
+                <View style={styles.cardText}>
+                  <View style={styles.nameRow}>
+                    <Text style={styles.langName}>{lang.nameEn.toUpperCase()}</Text>
+                    <HeatRow count={lang.heat} />
+                  </View>
+                  {lang.locked ? (
+                    <Text style={styles.tagline}>coming soon</Text>
+                  ) : (
+                    <Text style={[styles.tagline, selected && styles.taglineSelected]}>
+                      {lang.tagline}
+                    </Text>
+                  )}
+                </View>
+                <View style={[styles.radio, selected && styles.radioSelected]}>
+                  {selected && <Feather name="check" size={19} color={colors.onPrimary} />}
+                </View>
+              </TactileButton>
+            );
+          })}
+
+          <Pressable style={styles.ghostCard} onPress={() => setRequested(true)}>
+            <Text style={styles.ghostText}>
+              {requested ? 'noted — more on the way' : '+ request a language'}
+            </Text>
           </Pressable>
         </View>
-      </View>
+      </ScrollView>
 
-      <Text style={[typography.label, styles.sectionLabel]}>CHOOSE LANGUAGE</Text>
-
-      <View style={styles.grid}>
-        {LANGUAGES.map((lang) => (
-          <Pressable
-            key={lang.id}
-            disabled={lang.locked}
-            onPress={() => onSelectLanguage(lang.id)}
-            style={({ pressed }) => [
-              styles.card,
-              { borderColor: lang.locked ? colors.border : lang.accent },
-              pressed && !lang.locked && styles.cardPressed,
-            ]}
-          >
-            <Text style={styles.flag}>{lang.flag}</Text>
-            <Text style={styles.langName}>{lang.nameEn}</Text>
-            {lang.locked && (
-              <View style={styles.lockedOverlay}>
-                <Feather name="lock" size={26} color={colors.textPrimary} style={{ marginBottom: 4 }} />
-                <Text style={styles.lockedText}>Coming soon</Text>
-              </View>
-            )}
-          </Pressable>
-        ))}
+      <View style={styles.footer}>
+        <TactileButton
+          onPress={() => onSelectLanguage(selectedId)}
+          backgroundColor={colors.primary}
+          shadowColor={colors.primaryShadowSoft}
+          borderRadius={20}
+          depth={6}
+          style={styles.ctaWrap}
+          contentStyle={styles.ctaFace}
+        >
+          <Text style={styles.ctaText}>LET'S SWEAR</Text>
+          <MaterialCommunityIcons name="fire" size={22} color={colors.onPrimary} />
+        </TactileButton>
+        <Text style={styles.footerNote}>you can add more languages later</Text>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.bgPaper,
+  },
+  scroll: {
+    flex: 1,
   },
   content: {
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
     paddingTop: 60,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.lg,
   },
-  header: {
+  topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: spacing.md,
     marginBottom: spacing.lg,
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  gearButton: {
-    padding: 4,
-  },
-  sectionLabel: {
-    marginBottom: spacing.sm,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    gap: spacing.sm,
-  },
-  card: {
-    width: '48%',
-    aspectRatio: 1,
-    backgroundColor: colors.card,
-    borderWidth: 2,
-    borderRadius: radius.lg,
+  gearFace: {
+    width: 48,
+    height: 48,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.sm,
+  },
+  progressTrack: {
+    flex: 1,
+    height: 14,
+    backgroundColor: colors.surfaceContainer,
+    borderWidth: 2,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
     overflow: 'hidden',
+    marginBottom: 4,
   },
-  cardPressed: {
-    opacity: 0.7,
+  progressFill: {
+    height: '100%',
+    backgroundColor: colors.secondaryContainer,
+    borderRightWidth: 2,
+    borderRightColor: colors.border,
+    borderRadius: radius.pill,
   },
-  flag: {
-    fontSize: 44,
-    marginBottom: spacing.xs,
+  title: {
+    ...typography.display,
+    textTransform: 'uppercase',
+  },
+  subtitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    lineHeight: 24,
+    color: colors.textSecondary,
+    marginTop: 4,
+    marginBottom: spacing.lg,
+  },
+  list: {
+    gap: spacing.md,
+  },
+  cardFace: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: spacing.lg,
+  },
+  cardText: {
+    flex: 1,
+  },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: 2,
   },
   langName: {
-    ...typography.heading,
-    fontSize: 17,
+    fontSize: 22,
+    fontWeight: '800',
+    letterSpacing: -0.4,
+    color: colors.textPrimary,
   },
-  lockedOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.lockedOverlay,
+  heatRow: {
+    flexDirection: 'row',
+  },
+  tagline: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.textSecondary,
+  },
+  taglineSelected: {
+    color: colors.primary,
+    fontWeight: '800',
+  },
+  radio: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: colors.border,
+    backgroundColor: colors.surfaceContainer,
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft: spacing.sm,
   },
-  lockedText: {
-    ...typography.body,
-    fontWeight: '700',
+  radioSelected: {
+    backgroundColor: colors.primary,
+  },
+  ghostCard: {
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    borderColor: colors.outline,
+    borderRadius: 20,
+    paddingVertical: spacing.lg,
+    alignItems: 'center',
+  },
+  ghostText: {
+    fontSize: 19,
+    fontWeight: '800',
+    color: colors.textSecondary,
+  },
+  footer: {
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
+    backgroundColor: colors.bgPaper,
+    borderTopWidth: 1,
+    borderTopColor: colors.surfaceContainerHigh,
+  },
+  ctaWrap: {
+    width: '100%',
+  },
+  ctaFace: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+    paddingVertical: 18,
+  },
+  ctaText: {
+    fontSize: 18,
+    fontWeight: '900',
+    letterSpacing: 1.2,
+    color: colors.onPrimary,
+  },
+  footerNote: {
+    textAlign: 'center',
+    marginTop: spacing.sm,
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.textSecondary,
+    opacity: 0.8,
   },
 });
