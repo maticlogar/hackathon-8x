@@ -12,7 +12,7 @@ import { colors, typography, spacing, radius, rarityColors } from '../lib/theme'
 import { getCrateType } from '../content/crates';
 import { openCrate } from '../lib/crates';
 import { getLanguage } from '../content/languages';
-import { getMockScore } from '../lib/scoring';
+import { scoreRecording } from '../lib/scoring';
 import { useGame } from '../lib/store';
 
 const RARITY_EMOJI = {
@@ -77,20 +77,34 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
   };
 
   const stopRecordingAndJudge = async () => {
+    // Read duration before stop() — expo-audio zeroes it out once stopped.
+    const durationMillis = recorder.getStatus().durationMillis;
     await recorder.stop();
     await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
     setPhase('scoring');
-    setTimeout(() => {
-      const pass = state.demoMode || getMockScore().score >= GATE_PASS_THRESHOLD;
-      if (pass) {
-        dispatch({ type: 'ADD_TO_COLLECTION', item });
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        setPhase('pass');
-      } else {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        setPhase('fail');
-      }
-    }, 700);
+
+    let pass;
+    if (state.demoMode) {
+      pass = true;
+    } else {
+      const result = await scoreRecording({
+        uri: recorder.uri,
+        durationMillis,
+        targetWord: item.word,
+        meaning: item.meaning_en,
+        speechCode: lang.speechCode,
+      });
+      pass = result.score >= GATE_PASS_THRESHOLD;
+    }
+
+    if (pass) {
+      dispatch({ type: 'ADD_TO_COLLECTION', item });
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setPhase('pass');
+    } else {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      setPhase('fail');
+    }
   };
 
   const rotateInterpolate = shake.interpolate({ inputRange: [-1, 1], outputRange: ['-8deg', '8deg'] });

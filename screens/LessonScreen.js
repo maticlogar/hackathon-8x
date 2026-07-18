@@ -12,10 +12,12 @@ import {
 import { colors, typography, spacing, radius, severityColor } from '../lib/theme';
 import { getLanguage } from '../content/languages';
 import { getLevelsForLanguage } from '../lib/lessons';
-import { getMockScore } from '../lib/scoring';
+import { scoreRecording } from '../lib/scoring';
 import { useGame } from '../lib/store';
 
-// phase: 'word' -> 'recording' -> 'scoring' -> 'result' -> (next word or 'levelComplete')
+const PASS_THRESHOLD = 60;
+
+// phase: 'word' -> 'recording' -> 'scoring' -> 'result' -> (retry, or next word / 'levelComplete')
 export default function LessonScreen({ langId, level, onExit, onComplete }) {
   const { dispatch } = useGame();
   const lang = getLanguage(langId);
@@ -50,19 +52,24 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
   };
 
   const stopRecordingAndScore = async () => {
+    // Read duration before stop() — expo-audio zeroes it out once stopped.
+    const durationMillis = recorder.getStatus().durationMillis;
     await recorder.stop();
     await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
     setPhase('scoring');
-    setTimeout(() => {
-      const result = getMockScore();
-      setLastResult(result);
-      setScores((prev) => [...prev, result.score]);
-      setPhase('result');
-      const success = result.score >= 70;
-      Haptics.notificationAsync(
-        success ? Haptics.NotificationFeedbackType.Success : Haptics.NotificationFeedbackType.Warning
-      );
-    }, 700);
+    const result = await scoreRecording({
+      uri: recorder.uri,
+      durationMillis,
+      targetWord: word.word,
+      meaning: word.actually_means_en,
+      speechCode: lang.speechCode,
+    });
+    setLastResult(result);
+    setPhase('result');
+    const success = result.score >= PASS_THRESHOLD;
+    Haptics.notificationAsync(
+      success ? Haptics.NotificationFeedbackType.Success : Haptics.NotificationFeedbackType.Warning
+    );
   };
 
   useEffect(() => {
@@ -72,16 +79,25 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
     }
   }, [phase]);
 
-  const handleContinue = () => {
+  const handleRetry = () => {
+    setPhase('word');
+    setRevealed(false);
+    setLastResult(null);
+  };
+
+  const handleNext = () => {
+    if (!lastResult || lastResult.score < PASS_THRESHOLD) return;
+    const updatedScores = [...scores, lastResult.score];
+
     if (!isLastWord) {
+      setScores(updatedScores);
       setWordIndex((i) => i + 1);
       setPhase('word');
       setRevealed(false);
       setLastResult(null);
       return;
     }
-    const finalScores = scores;
-    const avg = Math.round(finalScores.reduce((a, b) => a + b, 0) / finalScores.length);
+    const avg = Math.round(updatedScores.reduce((a, b) => a + b, 0) / updatedScores.length);
     dispatch({ type: 'COMPLETE_LEVEL', lang: langId, level, score: avg });
     setPhase('levelComplete');
   };
@@ -156,7 +172,7 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
             style={[
               styles.scoreRing,
               {
-                borderColor: lastResult.score >= 70 ? colors.success : colors.danger,
+                borderColor: lastResult.score >= PASS_THRESHOLD ? colors.success : colors.danger,
                 transform: [{ scale: ringScale }],
               },
             ]}
@@ -164,9 +180,26 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
             <Text style={styles.scoreNumber}>{lastResult.score}</Text>
           </Animated.View>
           <Text style={styles.roast}>{lastResult.roast_line}</Text>
-          <Pressable style={styles.primaryButton} onPress={handleContinue}>
-            <Text style={styles.primaryButtonText}>{isLastWord ? 'Finish level' : 'Next word'}</Text>
-          </Pressable>
+          {lastResult.score < PASS_THRESHOLD && (
+            <Text style={typography.caption}>Score {PASS_THRESHOLD}+ to continue</Text>
+          )}
+          <View style={styles.resultButtons}>
+            <Pressable style={styles.secondaryButton} onPress={handleRetry}>
+              <Text style={styles.secondaryButtonText}>Poskusi znova · Retry</Text>
+            </Pressable>
+            <Pressable
+              disabled={lastResult.score < PASS_THRESHOLD}
+              style={[
+                styles.primaryButton,
+                lastResult.score < PASS_THRESHOLD && styles.primaryButtonDisabled,
+              ]}
+              onPress={handleNext}
+            >
+              <Text style={styles.primaryButtonText}>
+                {isLastWord ? 'Dokončaj · Finish level' : 'Naprej · Next word'}
+              </Text>
+            </Pressable>
+          </View>
         </View>
       ) : (
         <View style={styles.micArea}>
@@ -315,10 +348,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     marginTop: spacing.sm,
   },
+  primaryButtonDisabled: {
+    backgroundColor: colors.border,
+  },
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '800',
     color: '#141416',
+  },
+  resultButtons: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  secondaryButton: {
+    backgroundColor: colors.bgElevated,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginTop: spacing.sm,
+  },
+  secondaryButtonText: {
+    ...typography.body,
+    fontWeight: '700',
   },
   starsRow: {
     fontSize: 32,

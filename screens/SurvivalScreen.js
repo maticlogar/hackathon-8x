@@ -11,7 +11,7 @@ import {
 import { colors, typography, spacing, radius } from '../lib/theme';
 import wordpool from '../content/wordpool.json';
 import { getLanguage } from '../content/languages';
-import { getMockScore } from '../lib/scoring';
+import { scoreRecording } from '../lib/scoring';
 import { useGame } from '../lib/store';
 
 const PASS_THRESHOLD = 55;
@@ -51,32 +51,41 @@ export default function SurvivalScreen({ onBack }) {
   };
 
   const stopRecordingAndJudge = async () => {
+    // Read duration before stop() — expo-audio zeroes it out once stopped.
+    const durationMillis = recorder.getStatus().durationMillis;
     await recorder.stop();
     await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
     setPhase('scoring');
-    setTimeout(() => {
-      const pass = getMockScore().score >= PASS_THRESHOLD;
-      if (pass) {
-        const nextCombo = combo + 1;
-        const multiplier = Math.min(5, 1 + Math.floor(nextCombo / 3));
-        const awarded = 5 * multiplier;
-        setCombo(nextCombo);
-        setBestStreak((b) => Math.max(b, nextCombo));
-        setCoinsEarned((c) => c + awarded);
-        dispatch({ type: 'ADD_COINS', amount: awarded });
-        setLastResult({ awarded, multiplier });
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        setPhase('correct');
-      } else {
-        setCombo(0);
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        setLives((l) => {
-          const remaining = l - 1;
-          setPhase(remaining <= 0 ? 'gameover' : 'wrong');
-          return remaining;
-        });
-      }
-    }, 700);
+
+    const result = await scoreRecording({
+      uri: recorder.uri,
+      durationMillis,
+      targetWord: word.word,
+      meaning: word.meaning_en,
+      speechCode: lang.speechCode,
+    });
+    const pass = result.score >= PASS_THRESHOLD;
+
+    if (pass) {
+      const nextCombo = combo + 1;
+      const multiplier = Math.min(5, 1 + Math.floor(nextCombo / 3));
+      const awarded = 5 * multiplier;
+      setCombo(nextCombo);
+      setBestStreak((b) => Math.max(b, nextCombo));
+      setCoinsEarned((c) => c + awarded);
+      dispatch({ type: 'ADD_COINS', amount: awarded });
+      setLastResult({ awarded, multiplier });
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setPhase('correct');
+    } else {
+      setCombo(0);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      setLives((l) => {
+        const remaining = l - 1;
+        setPhase(remaining <= 0 ? 'gameover' : 'wrong');
+        return remaining;
+      });
+    }
   };
 
   const nextWord = () => {
