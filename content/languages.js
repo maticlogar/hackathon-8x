@@ -1,0 +1,55 @@
+// UI metadata for the language select screen. Not lesson content — see content/lessons.json.
+export const LANGUAGES = [
+  {
+    id: 'sl',
+    name: 'Slovenščina',
+    nameEn: 'Slovene',
+    flag: '🇸🇮',
+    speechCode: 'sl-SI',
+    accent: '#0038A8',
+    accentSecondary: '#D0103A',
+    locked: false,
+  },
+  {
+    id: 'de',
+    name: 'Deutsch',
+    nameEn: 'German',
+    flag: '🇩🇪',
+    speechCode: 'de-DE',
+    accent: '#FFCC00',
+    accentSecondary: '#1a1a1a',
+    locked: false,
+  },
+  {
+    id: 'ru',
+    name: 'Русский',
+    nameEn: 'Russian',
+    flag: '🇷🇺',
+    speechCode: 'ru-RU',
+    accent: '#0039A6',
+    accentSecondary: '#D52B1E',
+    locked: true,
+  },
+  {
+    id: 'es',
+    name: 'Español',
+    nameEn: 'Spanish',
+    flag: '🇪🇸',
+    speechCode: 'es-ES',
+    accent: '#AA151B',
+    accentSecondary: '#F1BF00',
+    locked: true,
+  },
+  {
+    id: 'it',
+    name: 'Italiano',
+    nameEn: 'Italian',
+    flag: '🇮🇹',
+    speechCode: 'it-IT',
+    accent: '#008C45',
+    accentSecondary: '#CD212A',
+    locked: true,
+  },
+];
+
+export const getLanguage = (id) => LANGUAGES.find((l) => l.id === id);

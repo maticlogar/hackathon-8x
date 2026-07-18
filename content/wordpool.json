@@ -1,0 +1,22 @@
+[
+  { "id": "wp-sl-01", "word": "Joj", "lang": "sl", "meaning_en": "\"Oh no\" / \"ugh\" — general dismay", "rarity": "common" },
+  { "id": "wp-sl-02", "word": "Fej", "lang": "sl", "meaning_en": "\"Yuck\" / \"gross\"", "rarity": "common" },
+  { "id": "wp-sl-03", "word": "Bedak", "lang": "sl", "meaning_en": "Fool, idiot", "rarity": "uncommon" },
+  { "id": "wp-sl-04", "word": "Lenuh", "lang": "sl", "meaning_en": "Lazybones", "rarity": "uncommon" },
+  { "id": "wp-sl-05", "word": "Packa", "lang": "sl", "meaning_en": "A klutz, someone who messes things up", "rarity": "rare" },
+  { "id": "wp-sl-06", "word": "Smrdljivec", "lang": "sl", "meaning_en": "Stinker", "rarity": "rare" },
+  { "id": "wp-sl-07", "word": "Pofukan", "lang": "sl", "meaning_en": "Messed up, fucked up (adjective)", "rarity": "epic" },
+  { "id": "wp-sl-08", "word": "Zabit", "lang": "sl", "meaning_en": "Blockhead, dense", "rarity": "epic" },
+  { "id": "wp-sl-09", "word": "Pizdarija", "lang": "sl", "meaning_en": "A fucked-up mess or situation", "rarity": "legendary" },
+  { "id": "wp-sl-10", "word": "Jebenti", "lang": "sl", "meaning_en": "\"Goddammit\" — strong exclamation", "rarity": "legendary" },
+  { "id": "wp-de-01", "word": "Mist", "lang": "de", "meaning_en": "\"Darn\" / \"crap\" — mild", "rarity": "common" },
+  { "id": "wp-de-02", "word": "Quatsch", "lang": "de", "meaning_en": "Nonsense, bullshit", "rarity": "common" },
+  { "id": "wp-de-03", "word": "Blödian", "lang": "de", "meaning_en": "Fool, dimwit", "rarity": "uncommon" },
+  { "id": "wp-de-04", "word": "Penner", "lang": "de", "meaning_en": "Bum, loser", "rarity": "uncommon" },
+  { "id": "wp-de-05", "word": "Arsch", "lang": "de", "meaning_en": "Ass", "rarity": "rare" },
+  { "id": "wp-de-06", "word": "Kacke", "lang": "de", "meaning_en": "Crap, poop", "rarity": "rare" },
+  { "id": "wp-de-07", "word": "Hurensohn", "lang": "de", "meaning_en": "Motherfucker (lit. \"son of a whore\")", "rarity": "epic" },
+  { "id": "wp-de-08", "word": "Fotze", "lang": "de", "meaning_en": "Cunt — very vulgar", "rarity": "epic" },
+  { "id": "wp-de-09", "word": "Arschgeige", "lang": "de", "meaning_en": "Jerk, idiot (lit. \"ass-violin\")", "rarity": "legendary" },
+  { "id": "wp-de-10", "word": "Hackfresse", "lang": "de", "meaning_en": "\"Ugly mug\" / \"shut your face\" — regional slang", "rarity": "legendary" }
+]

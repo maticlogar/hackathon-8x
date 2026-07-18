@@ -1,0 +1,242 @@
+[
+  {
+    "id": "sl-01",
+    "word": "Zaboga",
+    "phonetic": "za-BOH-ga",
+    "literal_en": "For God's sake",
+    "actually_means_en": "A mild exclamation of exasperation, like \"come on!\"",
+    "severity": 1,
+    "usage_note_en": "Safe around grandparents. Use when someone is being slow.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-02",
+    "word": "Baraba",
+    "phonetic": "ba-RA-ba",
+    "literal_en": "Scoundrel",
+    "actually_means_en": "An affectionate tease for a lovable troublemaker",
+    "severity": 1,
+    "usage_note_en": "Sounds harsh, isn't. Said with a smile, usually to a friend who just pulled a prank.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-03",
+    "word": "Prekleto",
+    "phonetic": "prek-LEH-to",
+    "literal_en": "Damned",
+    "actually_means_en": "\"Damn it\" — general frustration",
+    "severity": 2,
+    "usage_note_en": "Universal filler curse. Works for stubbed toes and slow wifi alike.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-04",
+    "word": "Smrkavec",
+    "phonetic": "SMUR-ka-vets",
+    "literal_en": "Little snot-nose",
+    "actually_means_en": "A cheeky brat, usually a kid or a young upstart",
+    "severity": 2,
+    "usage_note_en": "Teasing, not vicious. Aimed at someone acting younger than they are.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-05",
+    "word": "Tepec",
+    "phonetic": "TEH-pets",
+    "literal_en": "Fool",
+    "actually_means_en": "\"You idiot\" — calling someone out for a dumb move",
+    "severity": 3,
+    "usage_note_en": "Standard-issue insult. Fine among friends, risky with strangers.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-06",
+    "word": "Kreten",
+    "phonetic": "KREH-ten",
+    "literal_en": "Cretin",
+    "actually_means_en": "\"You moron\" — sharper than tepec",
+    "severity": 3,
+    "usage_note_en": "Reserve for actual bad decisions, like cutting you off in traffic.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-07",
+    "word": "Sranje",
+    "phonetic": "SRAH-nyeh",
+    "literal_en": "Shit",
+    "actually_means_en": "\"Shit!\" — general dismay",
+    "severity": 3,
+    "usage_note_en": "The all-purpose reaction to bad news. Interchangeable with dropping your phone.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-08",
+    "word": "Debil",
+    "phonetic": "deh-BEEL",
+    "literal_en": "Moron",
+    "actually_means_en": "\"Idiot\" — blunt and direct",
+    "severity": 3,
+    "usage_note_en": "No subtlety here. Understood instantly, everywhere.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-09",
+    "word": "Prasec",
+    "phonetic": "PRAH-sets",
+    "literal_en": "Pig",
+    "actually_means_en": "A scumbag, someone who behaved disgustingly",
+    "severity": 4,
+    "usage_note_en": "For someone who genuinely crossed a line, not just annoying.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-10",
+    "word": "Kurac",
+    "phonetic": "KOO-rats",
+    "literal_en": "Dick",
+    "actually_means_en": "Used as \"damn it!\" or \"what the hell\"",
+    "severity": 4,
+    "usage_note_en": "Extremely common exclamation, more punctuation than insult.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-11",
+    "word": "Jebi ga",
+    "phonetic": "YEH-bee gah",
+    "literal_en": "Fuck it",
+    "actually_means_en": "\"Screw it\" — resigned acceptance of a bad situation",
+    "severity": 4,
+    "usage_note_en": "The national shrug. Deploy when nothing can be done.",
+    "lang": "sl"
+  },
+  {
+    "id": "sl-12",
+    "word": "Pizda",
+    "phonetic": "PEEZ-da",
+    "literal_en": "Cunt",
+    "actually_means_en": "Used as \"fuck!\" or \"damn!\" — top-shelf frustration",
+    "severity": 5,
+    "usage_note_en": "The strongest common exclamation. Save it for real disasters.",
+    "lang": "sl"
+  },
+  {
+    "id": "de-01",
+    "word": "Verdammt",
+    "phonetic": "fair-DAMT",
+    "literal_en": "Damned",
+    "actually_means_en": "\"Damn it\" — mild, everyday frustration",
+    "severity": 1,
+    "usage_note_en": "The German default curse. Safe in front of coworkers.",
+    "lang": "de"
+  },
+  {
+    "id": "de-02",
+    "word": "Mistkerl",
+    "phonetic": "MIST-kairl",
+    "literal_en": "Dung fellow",
+    "actually_means_en": "An affectionate \"you rascal\" for someone who just pulled a stunt",
+    "severity": 1,
+    "usage_note_en": "Sounds like an insult, lands like a hug. Said with a laugh.",
+    "lang": "de"
+  },
+  {
+    "id": "de-03",
+    "word": "Blödmann",
+    "phonetic": "BLURD-mahn",
+    "literal_en": "Stupid man",
+    "actually_means_en": "\"You fool\" — light ribbing",
+    "severity": 2,
+    "usage_note_en": "Playground-level insult. Fine between friends.",
+    "lang": "de"
+  },
+  {
+    "id": "de-04",
+    "word": "Trottel",
+    "phonetic": "TROT-el",
+    "literal_en": "Idiot",
+    "actually_means_en": "\"Dimwit\" — a notch sharper than blödmann",
+    "severity": 2,
+    "usage_note_en": "Common Austrian/German staple for everyday clumsiness.",
+    "lang": "de"
+  },
+  {
+    "id": "de-05",
+    "word": "Depp",
+    "phonetic": "dep",
+    "literal_en": "Idiot",
+    "actually_means_en": "\"You idiot\" — blunt, casual",
+    "severity": 2,
+    "usage_note_en": "Extremely common. Barely counts as swearing.",
+    "lang": "de"
+  },
+  {
+    "id": "de-06",
+    "word": "Scheiße",
+    "phonetic": "SHY-suh",
+    "literal_en": "Shit",
+    "actually_means_en": "\"Shit!\" — universal dismay",
+    "severity": 3,
+    "usage_note_en": "The all-purpose reaction. Stub your toe, say this.",
+    "lang": "de"
+  },
+  {
+    "id": "de-07",
+    "word": "Scheißkerl",
+    "phonetic": "SHY-skairl",
+    "literal_en": "Shit fellow",
+    "actually_means_en": "\"Shithead\" — someone who genuinely messed up",
+    "severity": 3,
+    "usage_note_en": "Stronger than trottel, still survivable at a family dinner.",
+    "lang": "de"
+  },
+  {
+    "id": "de-08",
+    "word": "Idiot",
+    "phonetic": "ee-dee-OHT",
+    "literal_en": "Idiot",
+    "actually_means_en": "\"Idiot\" — direct, no frills",
+    "severity": 3,
+    "usage_note_en": "Understood instantly across every language, basically.",
+    "lang": "de"
+  },
+  {
+    "id": "de-09",
+    "word": "Arschloch",
+    "phonetic": "ARSH-lokh",
+    "literal_en": "Asshole",
+    "actually_means_en": "\"Asshole\" — someone who genuinely wronged you",
+    "severity": 4,
+    "usage_note_en": "The classic. Deploy after real betrayal, not minor annoyance.",
+    "lang": "de"
+  },
+  {
+    "id": "de-10",
+    "word": "Drecksau",
+    "phonetic": "DREK-zow",
+    "literal_en": "Filthy pig",
+    "actually_means_en": "A scumbag, someone who did something disgusting",
+    "severity": 4,
+    "usage_note_en": "Reserve for genuinely gross behavior.",
+    "lang": "de"
+  },
+  {
+    "id": "de-11",
+    "word": "Wichser",
+    "phonetic": "VIKH-ser",
+    "literal_en": "Wanker",
+    "actually_means_en": "A serious insult, roughly \"jerk-off\"",
+    "severity": 5,
+    "usage_note_en": "Strong. Only for people who truly deserve it.",
+    "lang": "de"
+  },
+  {
+    "id": "de-12",
+    "word": "Verpiss dich",
+    "phonetic": "fair-PISS dikh",
+    "literal_en": "Piss yourself away",
+    "actually_means_en": "\"Get lost\" / \"piss off\"",
+    "severity": 5,
+    "usage_note_en": "A command, not a description. Say it and walk away.",
+    "lang": "de"
+  }
+]
