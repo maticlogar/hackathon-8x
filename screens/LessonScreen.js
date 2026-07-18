@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
-import * as Speech from 'expo-speech';
 import * as Haptics from 'expo-haptics';
 import {
   useAudioRecorder,
@@ -13,6 +12,7 @@ import { colors, typography, spacing, radius, severityColor } from '../lib/theme
 import { getLanguage } from '../content/languages';
 import { getLevelsForLanguage } from '../lib/lessons';
 import { scoreRecording } from '../lib/scoring';
+import { speakWord } from '../lib/tts';
 import { useGame } from '../lib/store';
 import { useTripleTap } from '../lib/tripleTap';
 
@@ -39,7 +39,7 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
   const isLastWord = wordIndex === words.length - 1;
 
   const speak = () => {
-    Speech.speak(word.word, { language: lang.speechCode });
+    speakWord(word.word, langId, lang.speechCode);
   };
 
   const startRecording = async () => {
