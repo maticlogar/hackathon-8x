@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Pressable, Modal } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { colors, typography, spacing, radius } from '../lib/theme';
 import { useGame } from '../lib/store';
+import TactileButton from './TactileButton';
 
 export default function SettingsModal({ visible, onClose }) {
   const { state, dispatch } = useGame();
@@ -25,17 +26,24 @@ export default function SettingsModal({ visible, onClose }) {
                 Unlocks all levels, 9999 coins, pre-filled collection, rigged legendary crate + auto-pass gate.
               </Text>
             </View>
-            <Pressable
+            <TactileButton
               onPress={toggleDemoMode}
-              style={[styles.toggle, state.demoMode && styles.toggleOn]}
+              backgroundColor={state.demoMode ? colors.success : colors.lockedBg}
+              borderRadius={radius.pill}
+              contentStyle={styles.toggleContent}
             >
               <Text style={styles.toggleText}>{state.demoMode ? 'ON' : 'OFF'}</Text>
-            </Pressable>
+            </TactileButton>
           </View>
 
-          <Pressable style={styles.closeButton} onPress={onClose}>
+          <TactileButton
+            onPress={onClose}
+            backgroundColor={colors.coinGold}
+            borderRadius={radius.pill}
+            contentStyle={styles.closeButtonContent}
+          >
             <Text style={styles.closeButtonText}>Zapri · Close</Text>
-          </Pressable>
+          </TactileButton>
         </View>
       </View>
     </Modal>
@@ -64,23 +72,16 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     marginBottom: spacing.lg,
   },
-  toggle: {
-    backgroundColor: colors.border,
-    borderRadius: radius.pill,
+  toggleContent: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-  },
-  toggleOn: {
-    backgroundColor: colors.success,
   },
   toggleText: {
     fontSize: 13,
     fontWeight: '800',
     color: '#141416',
   },
-  closeButton: {
-    backgroundColor: colors.coinGold,
-    borderRadius: radius.pill,
+  closeButtonContent: {
     paddingVertical: 12,
     alignItems: 'center',
   },

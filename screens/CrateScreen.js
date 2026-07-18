@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated, Easing } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, Animated, Easing } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import {
   useAudioRecorder,
@@ -15,14 +16,7 @@ import { getLanguage } from '../content/languages';
 import { scoreRecording } from '../lib/scoring';
 import { useGame } from '../lib/store';
 import { useTripleTap } from '../lib/tripleTap';
-
-const RARITY_EMOJI = {
-  common: '📦',
-  uncommon: '🟩',
-  rare: '🟦',
-  epic: '🟪',
-  legendary: '🌟',
-};
+import TactileButton from '../components/TactileButton';
 
 const GATE_PASS_THRESHOLD = 55;
 
@@ -120,9 +114,11 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
     <View style={styles.screen}>
       {phase === 'building' && (
         <>
-          <Animated.Text style={[styles.crateEmoji, { transform: [{ rotate: rotateInterpolate }] }]}>
-            {crateType.icon}
-          </Animated.Text>
+          <Animated.Image
+            source={crateType.image}
+            style={[styles.crateImage, { transform: [{ rotate: rotateInterpolate }] }]}
+            resizeMode="contain"
+          />
           <Text style={typography.heading}>Odpiranje…</Text>
           <Text style={typography.caption}>Opening…</Text>
         </>
@@ -136,20 +132,28 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
               { backgroundColor: rarityColor, transform: [{ scale: burstScale }], opacity: burstOpacity },
             ]}
           />
-          <Animated.Text style={[styles.rarityEmoji, { transform: [{ scale: rarityScale }] }]}>
-            {RARITY_EMOJI[item.rarity]}
-          </Animated.Text>
+          <Animated.Image
+            source={crateType.imageOpen}
+            style={[styles.burstChestImage, { transform: [{ scale: rarityScale }] }]}
+            resizeMode="contain"
+          />
         </View>
       )}
 
       {phase === 'reveal' && (
         <>
-          <Text style={styles.rarityEmoji}>{RARITY_EMOJI[item.rarity]}</Text>
+          <Feather name="award" size={72} color={rarityColor} />
           <Text style={[styles.rarityLabel, { color: rarityColor }]}>{item.rarity.toUpperCase()}</Text>
           <Text style={styles.mysteryWord}>???</Text>
-          <Pressable style={styles.primaryButton} onPress={() => setPhase('gate')}>
+          <TactileButton
+            onPress={() => setPhase('gate')}
+            backgroundColor={colors.tertiaryContainer}
+            borderRadius={radius.pill}
+            contentStyle={styles.primaryButtonContent}
+            style={{ marginTop: spacing.md }}
+          >
             <Text style={styles.primaryButtonText}>Nadaljuj · Continue</Text>
-          </Pressable>
+          </TactileButton>
         </>
       )}
 
@@ -165,16 +169,16 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
           {phase === 'scoring' ? (
             <Text style={styles.judging}>Sodnik posluša…</Text>
           ) : (
-            <Pressable
+            <TactileButton
               onPressIn={startRecording}
               onPressOut={stopRecordingAndJudge}
-              style={({ pressed }) => [
-                styles.micButton,
-                (pressed || recorderState.isRecording) && styles.micButtonActive,
-              ]}
+              backgroundColor={recorderState.isRecording ? colors.danger : colors.card}
+              borderRadius={44}
+              contentStyle={styles.micButtonContent}
+              style={{ marginTop: spacing.md }}
             >
-              <Text style={styles.micIcon}>🎙️</Text>
-            </Pressable>
+              <Feather name="mic" size={36} color={colors.textPrimary} />
+            </TactileButton>
           )}
           <Text style={typography.caption}>{phase === 'gate' ? 'Hold to record, release to submit' : ''}</Text>
         </>
@@ -182,30 +186,51 @@ export default function CrateScreen({ crateTypeId, onGoShop, onGoCollection }) {
 
       {phase === 'pass' && (
         <>
-          <Text style={styles.rarityEmoji}>{RARITY_EMOJI[item.rarity]}</Text>
+          <Feather name="award" size={72} color={rarityColor} />
           <Text style={[styles.rarityLabel, { color: rarityColor }]}>{item.word}</Text>
-          <Text style={styles.passText}>✓ V zbirki!</Text>
+          <View style={styles.passRow}>
+            <Feather name="check-circle" size={22} color={colors.success} />
+            <Text style={styles.passText}>V zbirki!</Text>
+          </View>
           <Text style={typography.caption}>Added to collection</Text>
           <View style={styles.resultButtons}>
-            <Pressable style={styles.primaryButton} onPress={onGoCollection}>
+            <TactileButton
+              onPress={onGoCollection}
+              backgroundColor={colors.tertiaryContainer}
+              borderRadius={radius.pill}
+              contentStyle={styles.primaryButtonContent}
+              style={{ marginTop: spacing.md }}
+            >
               <Text style={styles.primaryButtonText}>Zbirka · Collection</Text>
-            </Pressable>
-            <Pressable style={styles.secondaryButton} onPress={onGoShop}>
+            </TactileButton>
+            <TactileButton
+              onPress={onGoShop}
+              backgroundColor={colors.card}
+              borderRadius={radius.pill}
+              contentStyle={styles.secondaryButtonContent}
+              style={{ marginTop: spacing.sm }}
+            >
               <Text style={styles.secondaryButtonText}>Trgovina · Shop</Text>
-            </Pressable>
+            </TactileButton>
           </View>
         </>
       )}
 
       {phase === 'fail' && (
         <>
-          <Text style={styles.rarityEmoji}>💨</Text>
+          <Feather name="x-circle" size={72} color={colors.danger} />
           <Text style={styles.failText}>Izgubljeno</Text>
           <Text style={typography.caption}>Lost — better luck next crate</Text>
           <View style={styles.resultButtons}>
-            <Pressable style={styles.primaryButton} onPress={onGoShop}>
+            <TactileButton
+              onPress={onGoShop}
+              backgroundColor={colors.tertiaryContainer}
+              borderRadius={radius.pill}
+              contentStyle={styles.primaryButtonContent}
+              style={{ marginTop: spacing.md }}
+            >
               <Text style={styles.primaryButtonText}>Trgovina · Shop</Text>
-            </Pressable>
+            </TactileButton>
           </View>
         </>
       )}
@@ -222,8 +247,9 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     gap: spacing.sm,
   },
-  crateEmoji: {
-    fontSize: 96,
+  crateImage: {
+    width: 160,
+    height: 160,
   },
   burstWrap: {
     width: 220,
@@ -237,8 +263,9 @@ const styles = StyleSheet.create({
     height: 160,
     borderRadius: 80,
   },
-  rarityEmoji: {
-    fontSize: 72,
+  burstChestImage: {
+    width: 150,
+    height: 150,
   },
   rarityLabel: {
     fontSize: 24,
@@ -260,34 +287,27 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
-  micButton: {
+  micButtonContent: {
     width: 88,
     height: 88,
-    borderRadius: 44,
-    backgroundColor: colors.bgElevated,
-    borderWidth: 3,
-    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spacing.md,
-  },
-  micButtonActive: {
-    backgroundColor: colors.danger,
-    borderColor: colors.danger,
-  },
-  micIcon: {
-    fontSize: 36,
   },
   judging: {
     ...typography.heading,
     color: colors.textSecondary,
     marginTop: spacing.md,
   },
+  passRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: spacing.sm,
+  },
   passText: {
     fontSize: 22,
     fontWeight: '800',
     color: colors.success,
-    marginTop: spacing.sm,
   },
   failText: {
     fontSize: 26,
@@ -295,26 +315,20 @@ const styles = StyleSheet.create({
     color: colors.danger,
     marginTop: spacing.sm,
   },
-  primaryButton: {
-    backgroundColor: colors.coinGold,
-    borderRadius: radius.pill,
+  primaryButtonContent: {
     paddingVertical: 12,
     paddingHorizontal: 28,
-    marginTop: spacing.md,
+    alignItems: 'center',
   },
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '800',
     color: '#141416',
   },
-  secondaryButton: {
-    backgroundColor: colors.bgElevated,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.pill,
+  secondaryButtonContent: {
     paddingVertical: 12,
     paddingHorizontal: 28,
-    marginTop: spacing.sm,
+    alignItems: 'center',
   },
   secondaryButtonText: {
     ...typography.body,

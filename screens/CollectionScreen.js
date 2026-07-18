@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { colors, typography, spacing, radius, rarityColors } from '../lib/theme';
 import wordpool from '../content/wordpool.json';
 import { getLanguage } from '../content/languages';
@@ -14,8 +15,9 @@ export default function CollectionScreen({ onBack }) {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <Pressable onPress={onBack} hitSlop={12}>
-          <Text style={styles.back}>‹ Nazaj</Text>
+        <Pressable onPress={onBack} hitSlop={12} style={styles.backRow}>
+          <Feather name="chevron-left" size={18} color={colors.textSecondary} />
+          <Text style={styles.back}>Nazaj</Text>
         </Pressable>
         <CoinBar />
       </View>
@@ -53,7 +55,7 @@ export default function CollectionScreen({ onBack }) {
                         </Text>
                       </>
                     ) : (
-                      <Text style={styles.lockedIcon}>❔</Text>
+                      <Feather name="help-circle" size={26} color={colors.textMuted} style={{ opacity: 0.5 }} />
                     )}
                   </View>
                 );
@@ -81,6 +83,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: spacing.lg,
+  },
+  backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
   },
   back: {
     ...typography.body,
@@ -126,9 +133,5 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: 'center',
     marginTop: 2,
-  },
-  lockedIcon: {
-    fontSize: 26,
-    opacity: 0.3,
   },
 });

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import {
   useAudioRecorder,
@@ -13,6 +14,7 @@ import wordpool from '../content/wordpool.json';
 import { getLanguage } from '../content/languages';
 import { scoreRecording } from '../lib/scoring';
 import { useGame } from '../lib/store';
+import TactileButton from '../components/TactileButton';
 
 const PASS_THRESHOLD = 55;
 const START_LIVES = 3;
@@ -97,16 +99,28 @@ export default function SurvivalScreen({ onBack }) {
   if (phase === 'gameover') {
     return (
       <View style={styles.screen}>
-        <Text style={styles.gameOverEmoji}>💀</Text>
+        <Image source={require('../assets/mascots/trophy.png')} style={styles.trophyImage} resizeMode="contain" />
         <Text style={typography.title}>Konec igre</Text>
         <Text style={typography.caption}>Game over</Text>
         <View style={styles.summary}>
-          <Text style={styles.summaryLine}>🪙 Coins earned: {coinsEarned}</Text>
-          <Text style={styles.summaryLine}>🔥 Best streak: {bestStreak}</Text>
+          <View style={styles.summaryRow}>
+            <Image source={require('../assets/mascots/currency.png')} style={styles.summaryIcon} resizeMode="contain" />
+            <Text style={styles.summaryLine}>Coins earned: {coinsEarned}</Text>
+          </View>
+          <View style={styles.summaryRow}>
+            <Feather name="zap" size={16} color={colors.streakFlame} />
+            <Text style={styles.summaryLine}>Best streak: {bestStreak}</Text>
+          </View>
         </View>
-        <Pressable style={styles.primaryButton} onPress={onBack}>
+        <TactileButton
+          onPress={onBack}
+          backgroundColor={colors.tertiaryContainer}
+          borderRadius={radius.pill}
+          contentStyle={styles.primaryButtonContent}
+          style={{ marginTop: spacing.sm }}
+        >
           <Text style={styles.primaryButtonText}>Nazaj · Back</Text>
-        </Pressable>
+        </TactileButton>
       </View>
     );
   }
@@ -114,15 +128,28 @@ export default function SurvivalScreen({ onBack }) {
   return (
     <View style={styles.screen}>
       <View style={styles.header}>
-        <Pressable onPress={onBack} hitSlop={12}>
-          <Text style={styles.back}>‹ Nazaj</Text>
+        <Pressable onPress={onBack} hitSlop={12} style={styles.backRow}>
+          <Feather name="chevron-left" size={18} color={colors.textSecondary} />
+          <Text style={styles.back}>Nazaj</Text>
         </Pressable>
-        <Text style={styles.lives}>{'❤️'.repeat(lives)}{'🖤'.repeat(START_LIVES - lives)}</Text>
+        <View style={styles.livesRow}>
+          {Array.from({ length: START_LIVES }).map((_, i) => (
+            <Feather
+              key={i}
+              name="heart"
+              size={18}
+              color={i < lives ? colors.danger : colors.lockedBg}
+            />
+          ))}
+        </View>
       </View>
 
       <View style={styles.comboRow}>
         <Text style={typography.caption}>Combo: {combo}</Text>
-        <Text style={[typography.caption, { color: colors.coinGold }]}>🪙 {coinsEarned}</Text>
+        <View style={styles.summaryRow}>
+          <Image source={require('../assets/mascots/currency.png')} style={styles.summaryIcon} resizeMode="contain" />
+          <Text style={[typography.caption, { color: colors.coinGold }]}>{coinsEarned}</Text>
+        </View>
       </View>
 
       <View style={styles.wordArea}>
@@ -133,22 +160,41 @@ export default function SurvivalScreen({ onBack }) {
 
       {phase === 'correct' && (
         <View style={styles.feedbackArea}>
-          <Text style={styles.correctText}>✓ Correct! +{lastResult.awarded} 🪙</Text>
+          <View style={styles.summaryRow}>
+            <Feather name="check-circle" size={20} color={colors.success} />
+            <Text style={styles.correctText}>Correct! +{lastResult.awarded}</Text>
+            <Image source={require('../assets/mascots/currency.png')} style={styles.summaryIcon} resizeMode="contain" />
+          </View>
           {lastResult.multiplier > 1 && (
             <Text style={typography.caption}>x{lastResult.multiplier} combo multiplier</Text>
           )}
-          <Pressable style={styles.primaryButton} onPress={nextWord}>
+          <TactileButton
+            onPress={nextWord}
+            backgroundColor={colors.tertiaryContainer}
+            borderRadius={radius.pill}
+            contentStyle={styles.primaryButtonContent}
+            style={{ marginTop: spacing.sm }}
+          >
             <Text style={styles.primaryButtonText}>Next word</Text>
-          </Pressable>
+          </TactileButton>
         </View>
       )}
 
       {phase === 'wrong' && (
         <View style={styles.feedbackArea}>
-          <Text style={styles.wrongText}>✗ Missed — lost a life</Text>
-          <Pressable style={styles.primaryButton} onPress={nextWord}>
+          <View style={styles.summaryRow}>
+            <Feather name="x-circle" size={20} color={colors.danger} />
+            <Text style={styles.wrongText}>Missed — lost a life</Text>
+          </View>
+          <TactileButton
+            onPress={nextWord}
+            backgroundColor={colors.tertiaryContainer}
+            borderRadius={radius.pill}
+            contentStyle={styles.primaryButtonContent}
+            style={{ marginTop: spacing.sm }}
+          >
             <Text style={styles.primaryButtonText}>Next word</Text>
-          </Pressable>
+          </TactileButton>
         </View>
       )}
 
@@ -157,16 +203,15 @@ export default function SurvivalScreen({ onBack }) {
           {phase === 'scoring' ? (
             <Text style={styles.judging}>Sodnik posluša…</Text>
           ) : (
-            <Pressable
+            <TactileButton
               onPressIn={startRecording}
               onPressOut={stopRecordingAndJudge}
-              style={({ pressed }) => [
-                styles.micButton,
-                (pressed || recorderState.isRecording) && styles.micButtonActive,
-              ]}
+              backgroundColor={recorderState.isRecording ? colors.danger : colors.card}
+              borderRadius={44}
+              contentStyle={styles.micButtonContent}
             >
-              <Text style={styles.micIcon}>🎙️</Text>
-            </Pressable>
+              <Feather name="mic" size={36} color={colors.textPrimary} />
+            </TactileButton>
           )}
           <Text style={typography.caption}>
             {phase === 'word' ? 'Hold to record, release to submit' : ''}
@@ -193,13 +238,19 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: spacing.sm,
   },
+  backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
   back: {
     ...typography.body,
     color: colors.textSecondary,
     fontWeight: '700',
   },
-  lives: {
-    fontSize: 18,
+  livesRow: {
+    flexDirection: 'row',
+    gap: 4,
   },
   comboRow: {
     flexDirection: 'row',
@@ -224,22 +275,11 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     marginTop: 'auto',
   },
-  micButton: {
+  micButtonContent: {
     width: 88,
     height: 88,
-    borderRadius: 44,
-    backgroundColor: colors.bgElevated,
-    borderWidth: 3,
-    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  micButtonActive: {
-    backgroundColor: colors.danger,
-    borderColor: colors.danger,
-  },
-  micIcon: {
-    fontSize: 36,
   },
   judging: {
     ...typography.heading,
@@ -260,21 +300,29 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.danger,
   },
-  primaryButton: {
-    backgroundColor: colors.coinGold,
-    borderRadius: radius.pill,
+  primaryButtonContent: {
     paddingVertical: 12,
     paddingHorizontal: 28,
-    marginTop: spacing.sm,
+    alignItems: 'center',
   },
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '800',
     color: '#141416',
   },
-  gameOverEmoji: {
-    fontSize: 64,
+  trophyImage: {
+    width: 80,
+    height: 80,
     marginTop: spacing.xl,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  summaryIcon: {
+    width: 16,
+    height: 16,
   },
   summary: {
     marginVertical: spacing.lg,

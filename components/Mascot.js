@@ -1,31 +1,25 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
+import { colors } from '../lib/theme';
 
-// Jezni Kozorog — the Angry Ibex mascot. Emoji-based, no image assets.
+// The angry chili pepper — the app's mascot.
 export default function Mascot({ size = 56 }) {
   return (
     <View style={[styles.wrap, { width: size, height: size, borderRadius: size / 2 }]}>
-      <Text style={{ fontSize: size * 0.6 }}>🐐</Text>
-      <View style={styles.badge}>
-        <Text style={styles.badgeText}>💢</Text>
-      </View>
+      <Image
+        source={require('../assets/mascots/app-mascot.png')}
+        style={{ width: size * 0.72, height: size * 0.72 }}
+        resizeMode="contain"
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrap: {
-    backgroundColor: '#2a1414',
+    backgroundColor: colors.primaryContainer,
     borderWidth: 2,
-    borderColor: '#ff4d4d',
+    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  badge: {
-    position: 'absolute',
-    top: -6,
-    right: -6,
-  },
-  badgeText: {
-    fontSize: 16,
   },
 });

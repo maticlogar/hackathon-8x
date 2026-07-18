@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { colors, typography, spacing, radius } from '../lib/theme';
 import { LANGUAGES } from '../content/languages';
 import Mascot from '../components/Mascot';
@@ -24,22 +25,22 @@ export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCo
         <View style={styles.headerRight}>
           <CoinBar />
           <Pressable style={styles.gearButton} onPress={() => setSettingsVisible(true)} hitSlop={8}>
-            <Text style={styles.gearIcon}>⚙️</Text>
+            <Feather name="settings" size={20} color={colors.textPrimary} />
           </Pressable>
         </View>
       </View>
 
       <View style={styles.navRow}>
         <Pressable style={styles.navButton} onPress={onOpenShop}>
-          <Text style={styles.navIcon}>🛒</Text>
+          <Feather name="shopping-cart" size={22} color={colors.textPrimary} />
           <Text style={styles.navLabel}>Trgovina</Text>
         </Pressable>
         <Pressable style={styles.navButton} onPress={onOpenCollection}>
-          <Text style={styles.navIcon}>📦</Text>
+          <Feather name="package" size={22} color={colors.textPrimary} />
           <Text style={styles.navLabel}>Zbirka</Text>
         </Pressable>
         <Pressable style={styles.navButton} onPress={onOpenSurvival}>
-          <Text style={styles.navIcon}>💀</Text>
+          <Feather name="alert-triangle" size={22} color={colors.textPrimary} />
           <Text style={styles.navLabel}>Preživetje</Text>
         </Pressable>
       </View>
@@ -63,7 +64,7 @@ export default function LanguagesScreen({ onSelectLanguage, onOpenShop, onOpenCo
             <Text style={styles.langNameEn}>{lang.nameEn}</Text>
             {lang.locked && (
               <View style={styles.lockedOverlay}>
-                <Text style={styles.lockIcon}>🔒</Text>
+                <Feather name="lock" size={26} color={colors.textPrimary} style={{ marginBottom: 4 }} />
                 <Text style={styles.lockedText}>Kmalu</Text>
                 <Text style={styles.lockedTextEn}>Coming soon</Text>
               </View>
@@ -104,9 +105,6 @@ const styles = StyleSheet.create({
   gearButton: {
     padding: 4,
   },
-  gearIcon: {
-    fontSize: 20,
-  },
   navRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -116,14 +114,11 @@ const styles = StyleSheet.create({
   navButton: {
     flex: 1,
     backgroundColor: colors.card,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.border,
     borderRadius: radius.md,
     alignItems: 'center',
     paddingVertical: spacing.sm,
-  },
-  navIcon: {
-    fontSize: 22,
   },
   navLabel: {
     ...typography.caption,
@@ -169,10 +164,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lockedOverlay,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  lockIcon: {
-    fontSize: 26,
-    marginBottom: 4,
   },
   lockedText: {
     ...typography.body,

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, Animated } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import {
   useAudioRecorder,
@@ -8,6 +8,7 @@ import {
   setAudioModeAsync,
   requestRecordingPermissionsAsync,
 } from 'expo-audio';
+import { Feather } from '@expo/vector-icons';
 import { colors, typography, spacing, radius, severityColor } from '../lib/theme';
 import { getLanguage } from '../content/languages';
 import { getLevelsForLanguage } from '../lib/lessons';
@@ -15,6 +16,7 @@ import { scoreRecording } from '../lib/scoring';
 import { speakWord } from '../lib/tts';
 import { useGame } from '../lib/store';
 import { useTripleTap } from '../lib/tripleTap';
+import TactileButton from '../components/TactileButton';
 
 const PASS_THRESHOLD = 60;
 
@@ -117,13 +119,36 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
     const coinsAwarded = stars * 10;
     return (
       <View style={styles.screen}>
+        <Image source={require('../assets/mascots/trophy.png')} style={styles.trophyImage} resizeMode="contain" />
         <Text style={typography.title}>Level complete</Text>
-        <Text style={styles.starsRow}>{'⭐'.repeat(stars)}</Text>
+        <View style={styles.starsRow}>
+          {[1, 2, 3].map((n) => (
+            <Image
+              key={n}
+              source={
+                n <= stars
+                  ? require('../assets/mascots/star-yes.png')
+                  : require('../assets/mascots/star-no.png')
+              }
+              style={styles.starImage}
+              resizeMode="contain"
+            />
+          ))}
+        </View>
         <Text style={typography.body}>Average score: {avg}</Text>
-        <Text style={[typography.body, { color: colors.coinGold }]}>+{coinsAwarded} 🪙</Text>
-        <Pressable style={styles.primaryButton} onPress={onComplete}>
+        <View style={styles.coinsRow}>
+          <Image source={require('../assets/mascots/currency.png')} style={styles.coinIcon} resizeMode="contain" />
+          <Text style={[typography.body, { color: colors.coinGold }]}>+{coinsAwarded}</Text>
+        </View>
+        <TactileButton
+          onPress={onComplete}
+          backgroundColor={colors.tertiaryContainer}
+          borderRadius={radius.pill}
+          contentStyle={styles.primaryButtonContent}
+          style={{ marginTop: spacing.sm }}
+        >
           <Text style={styles.primaryButtonText}>Done</Text>
-        </Pressable>
+        </TactileButton>
       </View>
     );
   }
@@ -131,8 +156,9 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
   return (
     <View style={styles.screen}>
       <View style={styles.header}>
-        <Pressable onPress={onExit} hitSlop={12}>
-          <Text style={styles.back}>‹ Nazaj</Text>
+        <Pressable onPress={onExit} hitSlop={12} style={styles.backRow}>
+          <Feather name="chevron-left" size={18} color={colors.textSecondary} />
+          <Text style={styles.back}>Nazaj</Text>
         </Pressable>
         <Text style={typography.caption}>
           {wordIndex + 1} / {words.length}
@@ -145,18 +171,28 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
 
         <View style={styles.chiliRow}>
           {[1, 2, 3, 4, 5].map((n) => (
-            <Text
+            <Feather
               key={n}
-              style={[styles.chili, { opacity: n <= word.severity ? 1 : 0.2 }]}
-            >
-              🌶️
-            </Text>
+              name="circle"
+              size={18}
+              color={n <= word.severity ? severityColor(word.severity) : colors.lockedBg}
+              style={n <= word.severity ? { opacity: 1 } : { opacity: 0.5 }}
+            />
           ))}
         </View>
 
-        <Pressable style={styles.playButton} onPress={speak}>
-          <Text style={styles.playButtonText}>▶ Play</Text>
-        </Pressable>
+        <TactileButton
+          onPress={speak}
+          backgroundColor={colors.card}
+          borderRadius={radius.pill}
+          contentStyle={styles.playButtonContent}
+          style={{ marginTop: spacing.lg }}
+        >
+          <View style={styles.playButtonRow}>
+            <Feather name="play" size={16} color={colors.textPrimary} />
+            <Text style={styles.playButtonText}>Play</Text>
+          </View>
+        </TactileButton>
 
         <Pressable style={styles.revealArea} onPress={() => setRevealed((r) => !r)}>
           {revealed ? (
@@ -193,21 +229,27 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
             <Text style={typography.caption}>Score {PASS_THRESHOLD}+ to continue</Text>
           )}
           <View style={styles.resultButtons}>
-            <Pressable style={styles.secondaryButton} onPress={handleRetry}>
+            <TactileButton
+              onPress={handleRetry}
+              backgroundColor={colors.card}
+              borderRadius={radius.pill}
+              contentStyle={styles.secondaryButtonContent}
+            >
               <Text style={styles.secondaryButtonText}>Poskusi znova · Retry</Text>
-            </Pressable>
-            <Pressable
+            </TactileButton>
+            <TactileButton
               disabled={lastResult.score < PASS_THRESHOLD}
-              style={[
-                styles.primaryButton,
-                lastResult.score < PASS_THRESHOLD && styles.primaryButtonDisabled,
-              ]}
               onPress={handleNext}
+              backgroundColor={
+                lastResult.score < PASS_THRESHOLD ? colors.lockedBg : colors.tertiaryContainer
+              }
+              borderRadius={radius.pill}
+              contentStyle={styles.primaryButtonContent}
             >
               <Text style={styles.primaryButtonText}>
                 {isLastWord ? 'Dokončaj · Finish level' : 'Naprej · Next word'}
               </Text>
-            </Pressable>
+            </TactileButton>
           </View>
         </View>
       ) : (
@@ -215,16 +257,15 @@ export default function LessonScreen({ langId, level, onExit, onComplete }) {
           {phase === 'scoring' ? (
             <Text style={styles.judging}>Sodnik posluša…</Text>
           ) : (
-            <Pressable
+            <TactileButton
               onPressIn={startRecording}
               onPressOut={stopRecordingAndScore}
-              style={({ pressed }) => [
-                styles.micButton,
-                (pressed || recorderState.isRecording) && styles.micButtonActive,
-              ]}
+              backgroundColor={recorderState.isRecording ? colors.danger : colors.card}
+              borderRadius={44}
+              contentStyle={styles.micButtonContent}
             >
-              <Text style={styles.micIcon}>🎙️</Text>
-            </Pressable>
+              <Feather name="mic" size={36} color={colors.textPrimary} />
+            </TactileButton>
           )}
           <Text style={typography.caption}>
             {phase === 'scoring' ? '' : 'Hold to record, release to submit'}
@@ -251,6 +292,11 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: spacing.md,
   },
+  backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
   back: {
     ...typography.body,
     color: colors.textSecondary,
@@ -275,17 +321,15 @@ const styles = StyleSheet.create({
     gap: 4,
     marginTop: spacing.md,
   },
-  chili: {
-    fontSize: 20,
-  },
-  playButton: {
-    marginTop: spacing.lg,
-    backgroundColor: colors.bgElevated,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.pill,
+  playButtonContent: {
     paddingVertical: 10,
     paddingHorizontal: 24,
+    alignItems: 'center',
+  },
+  playButtonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   playButtonText: {
     ...typography.body,
@@ -307,22 +351,11 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     marginTop: 'auto',
   },
-  micButton: {
+  micButtonContent: {
     width: 88,
     height: 88,
-    borderRadius: 44,
-    backgroundColor: colors.bgElevated,
-    borderWidth: 3,
-    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  micButtonActive: {
-    backgroundColor: colors.danger,
-    borderColor: colors.danger,
-  },
-  micIcon: {
-    fontSize: 36,
   },
   judging: {
     ...typography.heading,
@@ -350,15 +383,10 @@ const styles = StyleSheet.create({
     ...typography.body,
     textAlign: 'center',
   },
-  primaryButton: {
-    backgroundColor: colors.coinGold,
-    borderRadius: radius.pill,
+  primaryButtonContent: {
     paddingVertical: 12,
     paddingHorizontal: 28,
-    marginTop: spacing.sm,
-  },
-  primaryButtonDisabled: {
-    backgroundColor: colors.border,
+    alignItems: 'center',
   },
   primaryButtonText: {
     fontSize: 16,
@@ -370,21 +398,35 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     marginTop: spacing.sm,
   },
-  secondaryButton: {
-    backgroundColor: colors.bgElevated,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.pill,
+  secondaryButtonContent: {
     paddingVertical: 12,
     paddingHorizontal: 20,
-    marginTop: spacing.sm,
+    alignItems: 'center',
   },
   secondaryButtonText: {
     ...typography.body,
     fontWeight: '700',
   },
   starsRow: {
-    fontSize: 32,
+    flexDirection: 'row',
+    gap: spacing.xs,
     marginVertical: spacing.sm,
+  },
+  starImage: {
+    width: 40,
+    height: 40,
+  },
+  trophyImage: {
+    width: 72,
+    height: 72,
+  },
+  coinsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  coinIcon: {
+    width: 18,
+    height: 18,
   },
 });

@@ -1,8 +1,10 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { colors, typography, spacing, radius } from '../lib/theme';
 import { CRATE_TYPES } from '../content/crates';
 import { useGame } from '../lib/store';
 import CoinBar from '../components/CoinBar';
+import TactileButton from '../components/TactileButton';
 
 export default function ShopScreen({ onBack, onBuyCrate }) {
   const { state, dispatch } = useGame();
@@ -16,8 +18,9 @@ export default function ShopScreen({ onBack, onBuyCrate }) {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <Pressable onPress={onBack} hitSlop={12}>
-          <Text style={styles.back}>‹ Nazaj</Text>
+        <Pressable onPress={onBack} hitSlop={12} style={styles.backRow}>
+          <Feather name="chevron-left" size={18} color={colors.textSecondary} />
+          <Text style={styles.back}>Nazaj</Text>
         </Pressable>
         <CoinBar />
       </View>
@@ -29,7 +32,7 @@ export default function ShopScreen({ onBack, onBuyCrate }) {
         const affordable = state.coins >= crate.cost;
         return (
           <View key={crate.id} style={styles.card}>
-            <Text style={styles.icon}>{crate.icon}</Text>
+            <Image source={crate.image} style={styles.icon} resizeMode="contain" />
             <Text style={typography.heading}>{crate.name}</Text>
             <Text style={typography.caption}>{crate.nameEn}</Text>
 
@@ -41,13 +44,18 @@ export default function ShopScreen({ onBack, onBuyCrate }) {
               ))}
             </View>
 
-            <Pressable
+            <TactileButton
               disabled={!affordable}
               onPress={() => handleBuy(crate)}
-              style={[styles.buyButton, !affordable && styles.buyButtonDisabled]}
+              backgroundColor={affordable ? colors.coinGold : colors.lockedBg}
+              borderRadius={radius.pill}
+              contentStyle={styles.buyButtonContent}
             >
-              <Text style={styles.buyButtonText}>🪙 {crate.cost}</Text>
-            </Pressable>
+              <View style={styles.buyButtonRow}>
+                <Image source={require('../assets/mascots/currency.png')} style={styles.buyButtonIcon} resizeMode="contain" />
+                <Text style={styles.buyButtonText}>{crate.cost}</Text>
+              </View>
+            </TactileButton>
           </View>
         );
       })}
@@ -71,6 +79,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: spacing.lg,
   },
+  backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
   back: {
     ...typography.body,
     color: colors.textSecondary,
@@ -78,7 +91,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: colors.card,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.border,
     borderRadius: radius.lg,
     padding: spacing.lg,
@@ -86,7 +99,8 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   icon: {
-    fontSize: 48,
+    width: 72,
+    height: 72,
     marginBottom: spacing.xs,
   },
   oddsRow: {
@@ -101,14 +115,19 @@ const styles = StyleSheet.create({
     ...typography.caption,
     fontSize: 11,
   },
-  buyButton: {
-    backgroundColor: colors.coinGold,
-    borderRadius: radius.pill,
+  buyButtonContent: {
     paddingVertical: 12,
     paddingHorizontal: 32,
+    alignItems: 'center',
   },
-  buyButtonDisabled: {
-    backgroundColor: colors.border,
+  buyButtonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  buyButtonIcon: {
+    width: 18,
+    height: 18,
   },
   buyButtonText: {
     fontSize: 16,

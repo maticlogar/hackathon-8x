@@ -5,7 +5,8 @@ export const CRATE_TYPES = [
     name: 'Osnovni zaboj',
     nameEn: 'Basic Crate',
     cost: 100,
-    icon: '📦',
+    image: require('../assets/mascots/chest-basic.png'),
+    imageOpen: require('../assets/mascots/basic-chest-open.png'),
     odds: { common: 60, uncommon: 25, rare: 10, epic: 4, legendary: 1 },
   },
   {
@@ -13,7 +14,8 @@ export const CRATE_TYPES = [
     name: 'Premium zaboj',
     nameEn: 'Premium Crate',
     cost: 300,
-    icon: '🎁',
+    image: require('../assets/mascots/chest-premium.png'),
+    imageOpen: require('../assets/mascots/basic-chest-open.png'),
     odds: { common: 35, uncommon: 30, rare: 20, epic: 11, legendary: 4 },
   },
 ];
