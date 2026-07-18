@@ -37,6 +37,7 @@ export default function LevelsScreen({ langId, onBack, onSelectLevel, onOpenShop
       </View>
 
       <View style={styles.trail}>
+        <View style={styles.trailSpine} pointerEvents="none" />
         {levels.map((lvl, i) => {
           const isLocked = lvl.level > unlockedLevel;
           const isCompleted = lvl.level < unlockedLevel;
@@ -182,6 +183,17 @@ const styles = StyleSheet.create({
   trail: {
     alignItems: 'center',
     gap: spacing.xl,
+  },
+  trailSpine: {
+    position: 'absolute',
+    top: 30,
+    bottom: 30,
+    left: '50%',
+    marginLeft: -2,
+    width: 0,
+    borderLeftWidth: 4,
+    borderStyle: 'dashed',
+    borderColor: colors.surfaceContainerHigh,
   },
   nodeRow: {
     flexDirection: 'row',
