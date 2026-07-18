@@ -12,6 +12,11 @@ export default function SettingsModal({ visible, onClose }) {
     dispatch({ type: state.demoMode ? 'DISABLE_DEMO_MODE' : 'ENABLE_DEMO_MODE' });
   };
 
+  const addCoins = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    dispatch({ type: 'ADD_COINS', amount: 9999 });
+  };
+
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={styles.backdrop}>
@@ -22,7 +27,7 @@ export default function SettingsModal({ visible, onClose }) {
             <View style={{ flex: 1 }}>
               <Text style={typography.heading}>Demo Mode</Text>
               <Text style={typography.caption}>
-                Unlocks all levels, 9999 coins, pre-filled collection, rigged legendary crate + auto-pass gate.
+                Unlocks all levels, 9999 coins, full collection, rigged legendary crate + auto-pass gate. Reverts everything when turned off.
               </Text>
             </View>
             <TactileButton
@@ -32,6 +37,14 @@ export default function SettingsModal({ visible, onClose }) {
               contentStyle={styles.toggleContent}
             >
               <Text style={styles.toggleText}>{state.demoMode ? 'ON' : 'OFF'}</Text>
+            </TactileButton>
+            <TactileButton
+              onPress={addCoins}
+              backgroundColor={colors.coinGold}
+              borderRadius={radius.pill}
+              contentStyle={styles.toggleContent}
+            >
+              <Text style={styles.toggleText}>+9999</Text>
             </TactileButton>
           </View>
 
